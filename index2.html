@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <style>
+    html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+  </style>
+  <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+  <script>
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see a blank space instead of the map, this
+// is probably because you have denied permission for location sharing.
+
+var map;
+var allStops = [];
+var newStops = [];
+var globalZIndex = 1;
+var lastSearchedPoint;
+var pos; 
+var infowindow ;
+
+function initialize() {
+  var mapOptions = {
+    zoom: 15
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+       pos = new google.maps.LatLng(position.coords.latitude,
+       position.coords.longitude);
+
+      // var infowindow = new google.maps.InfoWindow({
+      //   map: map,
+      //   position: pos,
+      //   content: 'Location found using HTML5.'
+      // });
+
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+  google.maps.event.addListener(map, 'center_changed', function() {
+    
+    var currentCenterPoint = map.getCenter();
+    if(map.zoom < 15){
+      if(!infowindow ){
+         infowindow = new google.maps.InfoWindow({
+          map: map,
+          position: currentCenterPoint,
+          //size: {100,100},
+          content: 'Приблизь карту!'
+        });
+      }
+      else{
+        infowindow.setPosition(currentCenterPoint);
+        infowindow.setContent('Приблизь карту!');
+        if(infowindow.B == null){
+            infowindow = new google.maps.InfoWindow({
+            map: map,
+            position: currentCenterPoint,
+            //size: {100,100},
+            content: 'Приблизь карту!'
+          });
+        }
+      }
+      return;
+    }
+    else if(infowindow ){
+      var size = infowindow.getSize;
+      infowindow.close();
+    }
+   
+    if(!lastSearchedPoint){
+      if(!pos){
+        lastSearchedPoint = currentCenterPoint;
+        requestStations(lastSearchedPoint);
+      } else{
+        lastSearchedPoint = pos;
+        requestStations(lastSearchedPoint);
+        
+
+      }
+    }
+      else if (getDistance(lastSearchedPoint, currentCenterPoint) > 400){
+        lastSearchedPoint = currentCenterPoint;
+        requestStations(lastSearchedPoint);
+      }
+  });
+}
+
+function requestStations(point){
+  window.setTimeout(function() {
+   var url = "http://nearbus.azurewebsites.net/NearBusService.svc/station/find?lat="+point.lat()+"&lng="+point.lng()+"&q=20";
+   $.ajax({
+    url: url,
+    crossDomain: true,
+    //context: document.body,
+    success: function(responseData, textStatus, jqXHR){
+     var markers = responseData;
+     if(responseData.Result == true){
+      // first todo filter result
+      var newMarkers = filterResult(responseData.StationsRoutes);
+      setMarkers(map, newMarkers)
+    }
+  },
+  error: function (responseData, textStatus, errorThrown) {
+    alert('POST failed.');
+  }
+});
+
+ }, 500);
+}
+
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Error: The Geolocation service failed.';
+  } else {
+    var content = 'Error: Your browser doesn\'t support geolocation.';
+  }
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(60, 105),
+    content: content
+  };
+
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+};
+
+function filterResult(data){
+  // uniq id = Cityname+guid
+  newStops = [];
+  $.each(data, function(i, v){
+    var obj = {ID: v.Station.CityName + v.Station.GUID,  Routes: v.Routes, Station: v.Station, ZIndex:globalZIndex};
+    if(!allStops[obj.ID]){
+      allStops[obj.ID] = obj;
+      newStops[obj.ID] = obj;
+      globalZIndex ++;
+    }
+
+  });
+  return newStops;
+};
+
+function setMarkers(map, locations) {
+  // Add markers to the map
+
+
+  // Marker sizes are expressed as a Size of X,Y
+  // where the origin of the image (0,0) is located
+  // in the top left of the image.
+
+  // Origins, anchor positions and coordinates of the marker
+  // increase in the X direction to the right and in
+  // the Y direction down.
+  var image = {
+    url: 'res/marker_station_40.png',
+    // This marker is 20 pixels wide by 32 pixels tall.
+    size: new google.maps.Size(40, 53),
+    // The origin for this image is 0,0.
+    origin: new google.maps.Point(0,0),
+    // The anchor for this image is the base of the flagpole at 0,32.
+    anchor: new google.maps.Point(0, 53)
+  };
+  // Shapes define the clickable region of the icon.
+  // The type defines an HTML &lt;area&gt; element 'poly' which
+  // traces out a polygon as a series of X,Y points. The final
+  // coordinate closes the poly by connecting to the first
+  // coordinate.
+  // var shape = {
+  //     coords: [1, 1, 1, 20, 18, 20, 18 , 1],
+  //     type: 'poly'
+  // };
+  // $.each(locations, function(i, station){
+    for (var v in locations){
+      station = locations[v];
+      var myLatLng = new google.maps.LatLng(station.Station.Lat, station.Station.Lng);
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image,
+        // shape: shape,
+        title: station.Name,
+        zIndex: station.globalZIndex
+      });
+
+    };
+
+  };
+var rad = function(x) {
+  return x * Math.PI / 180;
+};
+
+var getDistance = function(p1, p2) {
+  var R = 6378137; // Earth’s mean radius in meter
+  var dLat = rad(p2.lat() - p1.lat());
+  var dLong = rad(p2.lng() - p1.lng());
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d; // returns the distance in meter
+};
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+</head>
+<body>
+  <div id="map-canvas"></div>
+</body>
+</html>
