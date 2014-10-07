@@ -4,13 +4,8 @@
   <title>Geolocation</title>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <style>
-    html, body, #map-canvas {
-      height: 100%;
-      margin: 0px;
-      padding: 0px
-    }
-  </style>
+
+  <link rel='stylesheet' type='text/css' href='css/style.css' />
   <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
@@ -26,6 +21,7 @@ var globalZIndex = 1;
 var lastSearchedPoint;
 var pos; 
 var infowindow ;
+var infoWindowErrorGeo;
 
 function initialize() {
   var mapOptions = {
@@ -57,6 +53,7 @@ function initialize() {
   }
   google.maps.event.addListener(map, 'center_changed', function() {
     
+    
     var currentCenterPoint = map.getCenter();
     if(map.zoom < 15){
       if(!infowindow ){
@@ -64,25 +61,24 @@ function initialize() {
           map: map,
           position: currentCenterPoint,
           //size: {100,100},
-          content: 'Приблизь карту!'
+          content: generateContent('Приблизь карту!', 'smallZoom')
         });
       }
       else{
         infowindow.setPosition(currentCenterPoint);
-        infowindow.setContent('Приблизь карту!');
+        infowindow.setContent(generateContent('Приблизь карту!', 'smallZoom'));
         if(infowindow.B == null){
             infowindow = new google.maps.InfoWindow({
             map: map,
             position: currentCenterPoint,
             //size: {100,100},
-            content: 'Приблизь карту!'
+            content: generateContent('Приблизь карту!', 'smallZoom')
           });
         }
       }
       return;
     }
     else if(infowindow ){
-      var size = infowindow.getSize;
       infowindow.close();
     }
    
@@ -129,19 +125,26 @@ function requestStations(point){
 
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
+    var content = generateContent('Если вы зашли с телефона - включите GPS и обновите страницу.', 'errorGeo');
+  } 
 
   var options = {
     map: map,
-    position: new google.maps.LatLng(60, 105),
-    content: content
+    position: new google.maps.LatLng(55.751244, 37.618423),
+     content: content//,
+    // pixelOffset: google.maps.Size( 200, 50),
+    // maxWidth: 200 
   };
 
-  var infowindow = new google.maps.InfoWindow(options);
+  if (errorFlag){
+    infoWindowErrorGeo = new google.maps.InfoWindow(options);
+  }
   map.setCenter(options.position);
+  setTimeout( function() { 
+    if(infoWindowErrorGeo){
+       infoWindowErrorGeo.close();
+    }}, 9000);
+
 };
 
 function filterResult(data){
@@ -171,23 +174,23 @@ function setMarkers(map, locations) {
   // increase in the X direction to the right and in
   // the Y direction down.
   var image = {
-    url: 'res/marker_station_40.png',
+    url: 'res/circle___bus_icon_3_360_36.png',
     // This marker is 20 pixels wide by 32 pixels tall.
-    size: new google.maps.Size(40, 53),
+    size: new google.maps.Size(36, 36),
     // The origin for this image is 0,0.
     origin: new google.maps.Point(0,0),
     // The anchor for this image is the base of the flagpole at 0,32.
-    anchor: new google.maps.Point(0, 53)
+    anchor: new google.maps.Point(0, 36)
   };
   // Shapes define the clickable region of the icon.
   // The type defines an HTML &lt;area&gt; element 'poly' which
   // traces out a polygon as a series of X,Y points. The final
   // coordinate closes the poly by connecting to the first
   // coordinate.
-  // var shape = {
-  //     coords: [1, 1, 1, 20, 18, 20, 18 , 1],
-  //     type: 'poly'
-  // };
+  var shape = {
+      coords: [16,16,16],
+      type: 'circle'
+  };
   // $.each(locations, function(i, station){
     for (var v in locations){
       station = locations[v];
@@ -196,7 +199,7 @@ function setMarkers(map, locations) {
         position: myLatLng,
         map: map,
         icon: image,
-        // shape: shape,
+        shape: shape,
         title: station.Name,
         zIndex: station.globalZIndex
       });
@@ -219,6 +222,27 @@ var getDistance = function(p1, p2) {
   var d = R * c;
   return d; // returns the distance in meter
 };
+
+function generateContent(dataForContent, infoWindowType){
+if(!infoWindowType){
+  return dataForContent;
+}
+var htmlContent = "";
+switch(infoWindowType){
+  case 'smallZoom': 
+    htmlContent += "<div class='infoWindowSmallZoom'>"+dataForContent+"</div>";
+    break;
+  case 'errorGeo': 
+    htmlContent += "<div class='infoWindowErrorGeo'>"+dataForContent+"</div>";
+    break;
+  default: 
+    htmlContent += dataForContent;
+    break;
+}
+return htmlContent;
+
+};
+
   google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
