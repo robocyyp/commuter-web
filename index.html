@@ -22,6 +22,7 @@ var lastSearchedPoint;
 var pos; 
 var infowindow ;
 var infoWindowErrorGeo;
+var openedInformationWindow=[];
 
 function initialize() {
   var mapOptions = {
@@ -220,7 +221,11 @@ function attachInfoWindow(marker) {
   });
 
   google.maps.event.addListener(marker, 'click', function() {
+    openedInformationWindow.forEach(function(v){
+      v.close();
+    });
     infowindowStation.open(map, marker);
+    openedInformationWindow.push(infowindowStation);
   });
 }
 
@@ -248,8 +253,22 @@ switch(infoWindowType){
   case 'errorGeo': 
     htmlContent += "<div class='infoWindowErrorGeo'>"+dataForContent+"</div>";
     break;
+  case 'errorGeo': 
+    htmlContent =="";
+    d=document.createElement('div');
+    $(d).attr("style", "width:300px;");
+
+    // .html(text)
+    // .appendTo($("#stopWindow")) //main div
+    // .click(function(){
+    //     $(this).remove();
+    // })
+    
+
+    break;  
   default: 
     htmlContent += dataForContent;
+
     break;
 }
 return htmlContent;
@@ -262,5 +281,6 @@ return htmlContent;
 </head>
 <body>
   <div id="map-canvas"></div>
+  <div id="stopWindow"></div>
 </body>
 </html>
