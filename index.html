@@ -257,7 +257,17 @@ switch(infoWindowType){
     htmlContent =="";
     d=document.createElement('div');
     $(d).attr("style", "width:300px;");
-
+    
+    jQuery('<div/>', {
+    id: 'foo',
+    css: {
+        fontWeight: 700,
+        color: 'green'
+    },
+    click: function(){
+        alert('Foo has been clicked!');
+    }
+});
     // .html(text)
     // .appendTo($("#stopWindow")) //main div
     // .click(function(){
