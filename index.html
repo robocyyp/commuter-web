@@ -200,16 +200,29 @@ function setMarkers(map, locations) {
         map: map,
         icon: image,
         shape: shape,
-        title: station.Name,
+        title: station.ID,
         zIndex: station.globalZIndex
       });
 
+      attachInfoWindow(marker);
     };
 
   };
 var rad = function(x) {
   return x * Math.PI / 180;
 };
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+function attachInfoWindow(marker) {
+  var infowindowStation = new google.maps.InfoWindow({
+    content: marker.title
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindowStation.open(map, marker);
+  });
+}
 
 var getDistance = function(p1, p2) {
   var R = 6378137; // Earth’s mean radius in meter
