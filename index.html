@@ -216,14 +216,17 @@ var rad = function(x) {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachInfoWindow(marker) {
+  
   var infowindowStation = new google.maps.InfoWindow({
-    content: marker.title
+    content: "content"
   });
 
   google.maps.event.addListener(marker, 'click', function() {
     openedInformationWindow.forEach(function(v){
       v.close();
     });
+    var content = generateContent(marker.title,'stationInfoWindow');
+    infowindowStation.setContent(content);
     infowindowStation.open(map, marker);
     openedInformationWindow.push(infowindowStation);
   });
@@ -253,21 +256,134 @@ switch(infoWindowType){
   case 'errorGeo': 
     htmlContent += "<div class='infoWindowErrorGeo'>"+dataForContent+"</div>";
     break;
-  case 'errorGeo': 
-    htmlContent =="";
-    d=document.createElement('div');
-    $(d).attr("style", "width:300px;");
+  case 'stationInfoWindow': 
     
-    jQuery('<div/>', {
-    id: 'foo',
-    css: {
-        fontWeight: 700,
-        color: 'green'
-    },
-    click: function(){
-        alert('Foo has been clicked!');
+    // jQuery('<div/>', {
+    // id: 'mainStationDiv',
+    // css: {
+    //     width: '300px',
+    //     color: 'green'
+    // },
+    // click: function(){
+    //     alert('Foo has been clicked!');
+    // }
+
+    var windowWidth = 250;
+    var selectedStation;
+    for (var s in allStops){
+      if (s ==dataForContent){
+        selectedStation = allStops[s];
+      }
     }
-});
+    if(!selectedStation){
+      return;
+    }
+
+    var mainDiv = jQuery('<div/>', {
+      id: 'mainStationDiv',
+      css: {
+          width: windowWidth+'px'
+      }
+    });
+    var headerDiv = jQuery('<div/>', {
+      id: 'headerDiv',
+      css: {
+          width: '100%'
+      }
+    });
+
+    headerDiv = $(headerDiv).append(jQuery('<div>'+selectedStation.Station.Name+'</div>', {
+      id: 'headerLabel',
+      css: {
+          width: '100%',
+          height:'40px',
+          'text-align':'left'
+      }
+    }));
+
+
+    var types = [];
+    selectedStation.Routes.forEach(function(v){
+      if(!types[v.TypeId]){
+        types[v.TypeId] = v.TypeId;
+      }
+    });
+
+    var divForTypes = [];
+    for (var t in types){
+      var divType = jQuery('<div/>', {
+        id: 'type'+t+'Div',
+        css: {
+            width: '100%'
+        }
+      });
+
+      var divIcon = jQuery('<div/>', {
+      css: {
+        'background': 'url(res/'+t+'.png) no-repeat',
+        'background-size': 'cover',
+        'width':  '50px',
+        'height': '50px',
+        'vertical-align': 'top',
+        'display':'inline-block'
+      }});
+
+      var placeForStation = jQuery('<div/>', {
+      css: {
+        'width': windowWidth-50+'px',
+        'height': 'auto',
+        'vertical-align': 'top',
+        'display':'inline-block'
+      }});
+
+      selectedStation.Routes.forEach(function(v){
+        var color;
+        switch(t){
+          case '1': color = 'green'; break;
+          case '2': color = 'blue'; break;
+          case '3': color = 'red'; break;
+          case '4': color = 'yellow'; break;
+          case '5': color = 'black'; break;
+          default: color = 'gray'; break
+        }
+        if(t == v.TypeId){
+            var divRoute = jQuery('<div/>', {
+                //id: v.Name+'_'+v.TypeId,
+                text: v.Name,
+                css: {
+                'background-color': color,
+                 'min-width': '30px',
+                height:'20px'  ,
+                margin: '4px',
+                 'text-align':'left',
+                 'display':'inline-block'
+              }
+            });
+            $(placeForStation).append(divRoute);
+        } 
+      });
+      $(divType).append(divIcon);
+      $(divType).append(placeForStation);
+      divForTypes.push(divType);
+    }
+    var bottomDiv = jQuery('<div/>', {
+      id: 'bottomDiv',
+      css: {
+          width: '100%',
+          height: '30px'
+      }
+    });
+
+    $(mainDiv).append(headerDiv);
+    divForTypes.forEach(function(v){
+      $(mainDiv).append(v);
+    });
+    $(mainDiv).append(bottomDiv);
+
+    var wrapDiv = jQuery('<div/>').append(mainDiv); 
+    htmlContent = $(wrapDiv).html();
+    
+
     // .html(text)
     // .appendTo($("#stopWindow")) //main div
     // .click(function(){
