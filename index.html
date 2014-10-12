@@ -294,11 +294,12 @@ switch(infoWindowType){
       }
     });
 
-    headerDiv = $(headerDiv).append(jQuery('<div>'+selectedStation.Station.Name+'</div>', {
+    headerDiv = $(headerDiv).append(jQuery('<div/>', {
       id: 'headerLabel',
+      text: selectedStation.Station.Name,
       css: {
           width: '100%',
-          height:'40px',
+         // height:'40px',
           'text-align':'left'
       }
     }));
@@ -377,10 +378,21 @@ switch(infoWindowType){
     var bottomDiv = jQuery('<div/>', {
       id: 'bottomDiv',
       css: {
-          width: '100%',
-          height: '30px'
+          width: '100%'//,
+          //height: '30px'
       }
     });
+
+    bottomDiv = $(bottomDiv).append(jQuery('<div/>', {
+      class: 'sheduleLink',
+      html: '<a href="http://robocyyp.github.io/commuter-web">Открыть расписание</a>',
+      css: {
+          width: '100%',
+          height:'30px',
+          'text-align':'right'
+      }
+    }));
+
 
     $(mainDiv).append(headerDiv);
     divForTypes.forEach(function(v){
