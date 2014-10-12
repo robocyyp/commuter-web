@@ -103,7 +103,7 @@ function initialize() {
 
 function requestStations(point){
   window.setTimeout(function() {
-   var url = "http://nearbus.azurewebsites.net/NearBusService.svc/station/find?lat="+point.lat()+"&lng="+point.lng()+"&q=20";
+   var url = "http://nearbus-test.azurewebsites.net/NearBusService.svc/station/find?lat="+point.lat()+"&lng="+point.lng()+"&q=20";
    $.ajax({
     url: url,
     crossDomain: true,
@@ -175,23 +175,24 @@ function setMarkers(map, locations) {
   // increase in the X direction to the right and in
   // the Y direction down.
   var image = {
-    url: 'res/circle___bus_icon_3_360_36.png',
+    url: 'res/ic_bus_128.png',
     // This marker is 20 pixels wide by 32 pixels tall.
-    size: new google.maps.Size(36, 36),
+    size: new google.maps.Size(32, 32),
+   scaledSize: new google.maps.Size(32, 32),
     // The origin for this image is 0,0.
     origin: new google.maps.Point(0,0),
     // The anchor for this image is the base of the flagpole at 0,32.
-    anchor: new google.maps.Point(0, 36)
+    anchor: new google.maps.Point(0, 32)
   };
   // Shapes define the clickable region of the icon.
   // The type defines an HTML &lt;area&gt; element 'poly' which
   // traces out a polygon as a series of X,Y points. The final
   // coordinate closes the poly by connecting to the first
   // coordinate.
-  var shape = {
-      coords: [16,16,16],
-      type: 'circle'
-  };
+  // var shape = {
+  //     coords: [64,64,64],
+  //     type: 'circle'
+  // };
   // $.each(locations, function(i, station){
     for (var v in locations){
       station = locations[v];
@@ -200,7 +201,7 @@ function setMarkers(map, locations) {
         position: myLatLng,
         map: map,
         icon: image,
-        shape: shape,
+       // shape: shape,
         title: station.ID,
         zIndex: station.globalZIndex
       });
@@ -315,7 +316,8 @@ switch(infoWindowType){
       var divType = jQuery('<div/>', {
         id: 'type'+t+'Div',
         css: {
-            width: '100%'
+            width: '100%',
+            'margin-top': '10px'
         }
       });
 
@@ -360,11 +362,11 @@ switch(infoWindowType){
                 color:'white',
                 'border-size':'1px',
                 'border-color': '#979797',
-                 'text-align':'left',
                  'display':'inline-block',
-                 'text-align':'middle'
+                 'text-align':'center'
               }
             });
+
             $(placeForStation).append(divRoute);
         } 
       });
