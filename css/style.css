@@ -27,10 +27,6 @@
    text-decoration: none;
  }
 
- .sheduleLink a:visited{
-	border-bottom-color: #0D9AE0;
-   color: #0D9AE0;
-   text-decoration: none;
  }
  .sheduleLink a:hover{
  	border-bottom-color: #8C0DE0;
