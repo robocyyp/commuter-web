@@ -19,15 +19,21 @@
  	height:20px;
  }  */
  .sheduleLink a{
-   text-align':right;
-   text-decoration: none;
+  /* text-align:right;*/
    border-bottom-width:1px;
    border-bottom-style: dashed;
    border-bottom-color: #0D9AE0;
    color: #0D9AE0;
+ }
 
+ 
+ .sheduleLink a:visited{
+	border-bottom-color: #0D9AE0;
+   color: #0D9AE0;
+   text-decoration: none;
  }
  .sheduleLink a:hover{
  	border-bottom-color: #8C0DE0;
    color: #8C0DE0;
  }
+
