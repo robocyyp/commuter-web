@@ -1,0 +1,35 @@
+ html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+
+
+ div.infoWindowSmallZoom {
+ 	width:100px; 
+ 	height:20px;
+ }   
+
+ div.infoWindowErrorGeo {
+ 	width:400px; 
+ 	height:20px;
+ }  
+/* div.infoWindowErrorGeo {
+ 	width:400px; 
+ 	height:20px;
+ }  */
+ .sheduleLink a, .sheduleLink a:visited,.sheduleLink a:link, .sheduleLink a:active{
+  /* text-align:right;*/
+   border-bottom-width:1px;
+   border-bottom-style: dashed;
+   border-bottom-color: #0D9AE0;
+   color: #0D9AE0;
+   text-decoration: none;
+ }
+
+ }
+ .sheduleLink a:hover{
+ 	border-bottom-color: #8C0DE0;
+   color: #8C0DE0;
+   text-decoration: none;
+ }

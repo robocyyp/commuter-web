@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+
+  <link rel='stylesheet' type='text/css' href='css/style.css' />
+  <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+  <script>
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see a blank space instead of the map, this
+// is probably because you have denied permission for location sharing.
+
+var map;
+var allStops = [];
+var newStops = [];
+var globalZIndex = 1;
+var lastSearchedPoint;
+var pos; 
+var infowindow ;
+var infoWindowErrorGeo;
+var openedInformationWindow=[];
+
+function initialize() {
+  var mapOptions = {
+    zoom: 15
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+       pos = new google.maps.LatLng(position.coords.latitude,
+       position.coords.longitude);
+
+      // var infowindow = new google.maps.InfoWindow({
+      //   map: map,
+      //   position: pos,
+      //   content: 'Location found using HTML5.'
+      // });
+
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+  google.maps.event.addListener(map, 'center_changed', function() {
+    
+    
+    var currentCenterPoint = map.getCenter();
+    if(map.zoom < 15){
+      if(!infowindow ){
+         infowindow = new google.maps.InfoWindow({
+          map: map,
+          position: currentCenterPoint,
+          //size: {100,100},
+          content: generateContent('Приблизь карту!', 'smallZoom')
+        });
+      }
+      else{
+        infowindow.setPosition(currentCenterPoint);
+        infowindow.setContent(generateContent('Приблизь карту!', 'smallZoom'));
+        if(infowindow.B == null){
+            infowindow = new google.maps.InfoWindow({
+            map: map,
+            position: currentCenterPoint,
+            //size: {100,100},
+            content: generateContent('Приблизь карту!', 'smallZoom')
+          });
+        }
+      }
+      return;
+    }
+    else if(infowindow ){
+      infowindow.close();
+    }
+   
+    if(!lastSearchedPoint){
+      if(!pos){
+        lastSearchedPoint = currentCenterPoint;
+        requestStations(lastSearchedPoint);
+      } else{
+        lastSearchedPoint = pos;
+        requestStations(lastSearchedPoint);
+        
+
+      }
+    }
+      else if (getDistance(lastSearchedPoint, currentCenterPoint) > 400){
+        lastSearchedPoint = currentCenterPoint;
+        requestStations(lastSearchedPoint);
+      }
+  });
+}
+
+function requestStations(point){
+  window.setTimeout(function() {
+   var url = "http://nearbus-test.azurewebsites.net/NearBusService.svc/station/find?lat="+point.lat()+"&lng="+point.lng()+"&q=20";
+   $.ajax({
+    url: url,
+    crossDomain: true,
+    //context: document.body,
+    success: function(responseData, textStatus, jqXHR){
+     var markers = responseData;
+     if(responseData.Result == true){
+      // first todo filter result
+      var newMarkers = filterResult(responseData.StationsRoutes);
+      setMarkers(map, newMarkers)
+    }
+  },
+  error: function (responseData, textStatus, errorThrown) {
+    alert('POST failed.');
+  }
+});
+
+ }, 500);
+}
+
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = generateContent('Если вы зашли с телефона - включите GPS и обновите страницу.', 'errorGeo');
+  } 
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(55.751244, 37.618423),
+     content: content//,
+    // pixelOffset: google.maps.Size( 200, 50),
+    // maxWidth: 200 
+  };
+
+  if (errorFlag){
+    infoWindowErrorGeo = new google.maps.InfoWindow(options);
+  }
+  map.setCenter(options.position);
+  setTimeout( function() { 
+    if(infoWindowErrorGeo){
+       infoWindowErrorGeo.close();
+    }}, 9000);
+
+};
+
+function filterResult(data){
+  // uniq id = Cityname+guid
+  newStops = [];
+  $.each(data, function(i, v){
+    var obj = {ID: v.Station.CityName + v.Station.GUID,  Routes: v.Routes, Station: v.Station, ZIndex:globalZIndex};
+    if(!allStops[obj.ID]){
+      allStops[obj.ID] = obj;
+      newStops[obj.ID] = obj;
+      globalZIndex ++;
+    }
+
+  });
+  return newStops;
+};
+
+function setMarkers(map, locations) {
+  // Add markers to the map
+
+
+  // Marker sizes are expressed as a Size of X,Y
+  // where the origin of the image (0,0) is located
+  // in the top left of the image.
+
+  // Origins, anchor positions and coordinates of the marker
+  // increase in the X direction to the right and in
+  // the Y direction down.
+  var image = {
+    url: 'res/ic_bus_128.png',
+    // This marker is 20 pixels wide by 32 pixels tall.
+    size: new google.maps.Size(32, 32),
+   scaledSize: new google.maps.Size(32, 32),
+    // The origin for this image is 0,0.
+    origin: new google.maps.Point(0,0),
+    // The anchor for this image is the base of the flagpole at 0,32.
+    anchor: new google.maps.Point(0, 32)
+  };
+  // Shapes define the clickable region of the icon.
+  // The type defines an HTML &lt;area&gt; element 'poly' which
+  // traces out a polygon as a series of X,Y points. The final
+  // coordinate closes the poly by connecting to the first
+  // coordinate.
+  // var shape = {
+  //     coords: [64,64,64],
+  //     type: 'circle'
+  // };
+  // $.each(locations, function(i, station){
+    for (var v in locations){
+      station = locations[v];
+      var myLatLng = new google.maps.LatLng(station.Station.Lat, station.Station.Lng);
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image,
+       // shape: shape,
+        title: station.ID,
+        zIndex: station.globalZIndex
+      });
+
+      attachInfoWindow(marker);
+    };
+
+  };
+var rad = function(x) {
+  return x * Math.PI / 180;
+};
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+function attachInfoWindow(marker) {
+  
+  var infowindowStation = new google.maps.InfoWindow({
+    content: "content"
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    openedInformationWindow.forEach(function(v){
+      v.close();
+    });
+    var content = generateContent(marker.title,'stationInfoWindow');
+    infowindowStation.setContent(content);
+    infowindowStation.open(map, marker);
+    openedInformationWindow.push(infowindowStation);
+  });
+}
+
+var getDistance = function(p1, p2) {
+  var R = 6378137; // Earth’s mean radius in meter
+  var dLat = rad(p2.lat() - p1.lat());
+  var dLong = rad(p2.lng() - p1.lng());
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d; // returns the distance in meter
+};
+
+function generateContent(dataForContent, infoWindowType){
+if(!infoWindowType){
+  return dataForContent;
+}
+var htmlContent = "";
+switch(infoWindowType){
+  case 'smallZoom': 
+    htmlContent += "<div class='infoWindowSmallZoom'>"+dataForContent+"</div>";
+    break;
+  case 'errorGeo': 
+    htmlContent += "<div class='infoWindowErrorGeo'>"+dataForContent+"</div>";
+    break;
+  case 'stationInfoWindow': 
+    
+    // jQuery('<div/>', {
+    // id: 'mainStationDiv',
+    // css: {
+    //     width: '300px',
+    //     color: 'green'
+    // },
+    // click: function(){
+    //     alert('Foo has been clicked!');
+    // }
+
+    var windowWidth = 250;
+    var selectedStation;
+    for (var s in allStops){
+      if (s ==dataForContent){
+        selectedStation = allStops[s];
+      }
+    }
+    if(!selectedStation){
+      return;
+    }
+
+    var mainDiv = jQuery('<div/>', {
+      id: 'mainStationDiv',
+      css: {
+          width: windowWidth+'px'
+      }
+    });
+    var headerDiv = jQuery('<div/>', {
+      id: 'headerDiv',
+      css: {
+          width: '100%',
+          'font-size':'16px'
+      }
+    });
+
+    headerDiv = $(headerDiv).append(jQuery('<div/>', {
+      id: 'headerLabel',
+      text: selectedStation.Station.Name,
+      css: {
+          width: '100%',
+         // height:'40px',
+          'text-align':'left'
+      }
+    }));
+
+
+    var types = [];
+    selectedStation.Routes.forEach(function(v){
+      if(!types[v.TypeId]){
+        types[v.TypeId] = v.TypeId;
+      }
+    });
+
+    var divForTypes = [];
+    for (var t in types){
+      var divType = jQuery('<div/>', {
+        id: 'type'+t+'Div',
+        css: {
+            width: '100%',
+            'margin-top': '10px'
+        }
+      });
+
+      var divIcon = jQuery('<div/>', {
+      css: {
+        'background': 'url(res/'+t+'.png) no-repeat center',
+        //'background-size': 'cover',
+        'width':  '40px',
+        'height': '32px',
+        'vertical-align': 'top',
+        'display':'inline-block'
+      }});
+
+      var placeForStation = jQuery('<div/>', {
+      css: {
+        'width': windowWidth-40+'px',
+        'height': 'auto',
+        'vertical-align': 'top',
+        'display':'inline-block'
+      }});
+
+      selectedStation.Routes.forEach(function(v){
+        var color;
+        switch(t){
+          case '1': color = '#39A37E'; break;
+          case '2': color = '#5EB0C6'; break;
+          case '3': color = '#E64C65'; break;
+          case '4': color = '#FBC02D'; break;
+          case '5': color = '#A83264'; break;
+          default: color = 'gray'; break
+        }
+        if(t == v.TypeId){
+            var divRoute = jQuery('<div/>', {
+                //id: v.Name+'_'+v.TypeId,
+                text: v.Name,
+                css: {
+                'background-color': color,
+                 'min-width': '30px',
+                height:'20px'  ,
+                margin: '4px',
+                'font-weight':'bold',
+                color:'white',
+                'border-size':'1px',
+                'border-color': '#979797',
+                 'display':'inline-block',
+                 'text-align':'center'
+              }
+            });
+
+            $(placeForStation).append(divRoute);
+        } 
+      });
+      $(divType).append(divIcon);
+      $(divType).append(placeForStation);
+      divForTypes.push(divType);
+    }
+    var bottomDiv = jQuery('<div/>', {
+      id: 'bottomDiv',
+      css: {
+          width: '100%'//,
+          //height: '30px'
+      }
+    });
+
+    bottomDiv = $(bottomDiv).append(jQuery('<div/>', {
+      class: 'sheduleLink',
+      html: '<a href="http://robocyyp.github.io/commuter-web">Открыть расписание</a>',
+      css: {
+          width: '100%',
+          height:'30px',
+          'text-align':'right'
+      }
+    }));
+
+
+    $(mainDiv).append(headerDiv);
+    divForTypes.forEach(function(v){
+      $(mainDiv).append(v);
+    });
+    $(mainDiv).append(bottomDiv);
+
+    var wrapDiv = jQuery('<div/>').append(mainDiv); 
+    htmlContent = $(wrapDiv).html();
+    
+
+    // .html(text)
+    // .appendTo($("#stopWindow")) //main div
+    // .click(function(){
+    //     $(this).remove();
+    // })
+    
+
+    break;  
+  default: 
+    htmlContent += dataForContent;
+
+    break;
+}
+return htmlContent;
+
+};
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+</head>
+<body>
+  <div id="map-canvas"></div>
+  <div id="stopWindow"></div>
+</body>
+</html>
