@@ -1,0 +1,29 @@
+body{
+  display:table;
+  text-align: center;
+}
+div#mainForecastDiv{
+
+display:table-cell;
+vertical-align: middle;
+text-align: left;
+width:480px;
+
+}
+
+#mainForecastDiv .forecastHeader{
+   width: 100%;
+   font-size:16px;
+}
+
+#mainForecastDiv .forecastBody{
+   width: 100%;
+   font-size:16px;
+
+}
+
+#mainForecastDiv .forecastFooter{
+   width: 100%;
+   font-size:16px;
+
+}
