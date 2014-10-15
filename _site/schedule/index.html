@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Commuter: Городской Транспорт. Commuter: Urban Transport</title>
+	<!--  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
+	<meta charset="utf-8">
+	<link rel='stylesheet' type='text/css' href='css/style.css' />
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+
+	<script>
+		var routesSPB = {"Result":true,"Vehicles":[{"RouteId":"1699","StationGuid":"1670","TimeRemaining":138},{"RouteId":"229","StationGuid":"1670","TimeRemaining":236},{"RouteId":"345","StationGuid":"1670","TimeRemaining":396},{"RouteId":"345","StationGuid":"1670","TimeRemaining":1737},{"RouteId":"345","StationGuid":"1670","TimeRemaining":2172},{"RouteId":"345","StationGuid":"1670","TimeRemaining":2384},{"RouteId":"345","StationGuid":"1670","TimeRemaining":2974}]};
+
+		var stationName = "Площадь Ильича";
+
+		function createShedule(forecast){
+			var mainDiv =  jQuery('<div/>', {
+				id: 'mainForecastDiv'
+			});
+			var headerDiv = jQuery('<div/>', {
+				class: 'forecastHeader'
+			});
+			headerDiv = $(headerDiv).append(jQuery('<div/>', {
+				class: 'headerLabel',
+				text: stationName
+				
+			}));
+
+			var bodyDiv = jQuery('<div/>', {
+				class: 'forecastBody'
+			});
+
+			// var types = [];
+		 //    selectedStation.Routes.forEach(function(v){
+		 //      if(!types[v.TypeId]){
+		 //        types[v.TypeId] = v.TypeId;
+		 //      }
+		 //    });
+
+
+			var footerDiv = jQuery('<div/>', {
+				class: 'forecastFooter'
+			});
+
+
+
+			$(mainDiv).append(headerDiv);
+			$(mainDiv).append(bodyDiv);
+			$(mainDiv).append(footerDiv);
+			if($('#mainForecastDiv').length ==0){
+				$('body').append(mainDiv);
+			}
+			else{
+				$('#mainForecastDiv').replaceWith(mainDiv);
+			}
+		};
+
+		createShedule(routesSPB);
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
