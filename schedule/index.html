@@ -43,8 +43,89 @@
 			});
 
 			// полностью отсортированный массив
-			var routeTimeType=[];
+			var routeTimeType = sortForecast(forecast);
+			var adCount = 0;
+		    routeTimeType.forEach(function(routesTime){
+			    adCount++;
+			    if(adCount == 3 || adCount == 5){
+			    	//todo добавить рекламный блок
+			    	/*<div id="container">
+					    <img src="something.jpg" alt="" />
+					</div>*/
+			    }
+		    	var routeDiv = jQuery('<div/>', {
+					class: 'route'
+				});
+				var routeTypeCellDiv = jQuery('<div/>', {
+					class: 'routeType-cell'
+				});
+				var routeTypeCellIconDiv = jQuery('<div/>', {
+					class: 'routeType-icon'
+				});
 
+				var img;	
+				switch(routesTime.TypeId){
+					case '1':  img = jQuery('<img/>', { src: "111"});	
+						break;
+					case '1':  img = jQuery('<img/>', { src: "111"});	
+						break;
+					case '1':  img = jQuery('<img/>', { src: "111"});	
+						break;
+					case '1':  img = jQuery('<img/>', { src: "111"});	
+						break;
+					case '1':  img = jQuery('<img/>', { src: "111"});	
+						break;
+					default:  img = jQuery('<img/>', { src: "111"});	
+						break;
+				}
+				$(routeTypeCellDiv).append(routeTypeCellIconDiv);
+				$(routeDiv).append(routeTypeCellDiv);
+
+				routesTime.forEach(function(routeTime){
+
+					var routeNameCellDiv = jQuery('<div/>', {
+						class: 'routeName-cell',
+						text: routeTime.RouteName
+					});
+					$(routeDiv).append(routeNameCellDiv);
+
+					routeTime.forEach(function(time){
+
+						var routeForecastCellDiv = jQuery('<div/>', {
+							class: 'routeForecast-cell'
+						});
+						
+						
+
+
+
+						
+
+						$(routeDiv).append(routeForecastCellDiv);
+						$(bodyDiv).append(routeDiv);
+					});
+				});
+		    });
+
+
+			var footerDiv = jQuery('<div/>', {
+				class: 'forecastFooter'
+			});
+
+
+
+			$(mainDiv).append(headerDiv);
+			$(mainDiv).append(bodyDiv);
+			$(mainDiv).append(footerDiv);
+			if($('#mainForecastDiv').length ==0){
+				$('body').append(mainDiv);
+			}
+			else{
+				$('#mainForecastDiv').replaceWith(mainDiv);
+			}
+		};
+		function sortForecast(forecast){
+			var routeTimeType=[];
 			var types = [];
 		    forecast.forEach(function(v){
 		      if(!types[v.TypeId]){
@@ -89,22 +170,7 @@
 				routeTimeType.push(objWithType);
 		    });
 
-
-			var footerDiv = jQuery('<div/>', {
-				class: 'forecastFooter'
-			});
-
-
-
-			$(mainDiv).append(headerDiv);
-			$(mainDiv).append(bodyDiv);
-			$(mainDiv).append(footerDiv);
-			if($('#mainForecastDiv').length ==0){
-				$('body').append(mainDiv);
-			}
-			else{
-				$('#mainForecastDiv').replaceWith(mainDiv);
-			}
+		    return routeTimeType;
 		};
 
 		createShedule(routesSPB.Vehicles);

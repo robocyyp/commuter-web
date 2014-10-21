@@ -11,25 +11,57 @@ width:480px;
 
 }
 
-#mainForecastDiv .forecastHeader{
+.forecastHeader{
    width: 100%;
    font-size:16px;
 }
 
-#mainForecastDiv .forecastHeader .headerLabel{
+.forecastHeader .headerLabel{
    width: 100%;
    text-align:left;
 }
 
 
 
-#mainForecastDiv .forecastBody{
+.forecastBody{
    width: 100%;
    font-size:16px;
 
 }
 
-#mainForecastDiv .forecastFooter{
+.forecastBody .adBlock{
+   width: 100%;
+   height: 50px;
+}
+
+.forecastBody .adBlock img {
+   width: 100%;
+}
+
+.forecastBody .route{
+   width: 100%;
+   display: table;
+}
+
+.route .route-cell{
+  display: table-cell;
+  width: 10%;
+  vertical-align:middle;
+  text-align:center;  
+}
+
+.route-cell .route-icon{
+  width: 40px;
+  height: 40px;
+  display: table-cell;
+  text-align:center; 
+  vertical-align:middle;  
+  /*background: url('../res/icon/checkmark-128.png') center no-repeat;
+  background-size: contain;*/
+}
+
+
+.forecastFooter{
    width: 100%;
    font-size:16px;
 
