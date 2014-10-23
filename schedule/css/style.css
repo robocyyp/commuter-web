@@ -43,14 +43,14 @@ width:480px;
    display: table;
 }
 
-.route .route-cell{
+.route .routeType-cell{
   display: table-cell;
-  width: 10%;
+  width: 15%;
   vertical-align:middle;
   text-align:center;  
 }
 
-.route-cell .route-icon{
+.route-cell .routeType-icon{
   width: 40px;
   height: 40px;
   display: table-cell;
@@ -59,6 +59,31 @@ width:480px;
   /*background: url('../res/icon/checkmark-128.png') center no-repeat;
   background-size: contain;*/
 }
+
+.route .routeName-cell{
+  display: table-cell;
+  width: 15%;
+  text-align:left;
+  vertical-align:middle;    
+}
+
+
+
+
+.route .routeForecast-cell{
+  display: table-cell;
+  width: 70%;
+  text-align:right;
+}
+
+.routeForecast-cell .forecast-time{
+height: 30px;
+font-size: 16px;
+display: inline-block;
+
+}
+
+
 
 
 .forecastFooter{

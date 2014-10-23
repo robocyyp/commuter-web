@@ -53,57 +53,61 @@
 					    <img src="something.jpg" alt="" />
 					</div>*/
 			    }
-		    	var routeDiv = jQuery('<div/>', {
-					class: 'route'
-				});
-				var routeTypeCellDiv = jQuery('<div/>', {
-					class: 'routeType-cell'
-				});
-				var routeTypeCellIconDiv = jQuery('<div/>', {
-					class: 'routeType-icon'
-				});
-
-				var img;	
-				switch(routesTime.TypeId){
-					case '1':  img = jQuery('<img/>', { src: "111"});	
+		    	
+				
+				var src;	
+				switch(routesTime.Type){
+					case 1:  src="../res/1.png";
 						break;
-					case '1':  img = jQuery('<img/>', { src: "111"});	
+					case 2:  src= "../res/2.png";
 						break;
-					case '1':  img = jQuery('<img/>', { src: "111"});	
+					case 3:  src= "../res/3.png";
 						break;
-					case '1':  img = jQuery('<img/>', { src: "111"});	
+					case 4:  src= "../res/4.png";
 						break;
-					case '1':  img = jQuery('<img/>', { src: "111"});	
+					case 5:  src= "../res/5.png";
 						break;
-					default:  img = jQuery('<img/>', { src: "111"});	
+					default:  src= "../res/1.png";
 						break;
 				}
-				$(routeTypeCellDiv).append(routeTypeCellIconDiv);
-				$(routeDiv).append(routeTypeCellDiv);
-
-				routesTime.forEach(function(routeTime){
+				
+				routesTime.Routes.forEach(function(routeTime){
+					var routeDiv = jQuery('<div/>', {
+						class: 'route'
+					});
+						var routeTypeCellDiv = jQuery('<div/>', {
+						class: 'routeType-cell'
+					});
+					var routeTypeCellIconDiv = jQuery('<div/>', {
+						class: 'routeType-icon'
+					});
+					var img = jQuery('<img/>', { src: src});
+					$(routeTypeCellIconDiv).append(img);
+					$(routeTypeCellDiv).append(routeTypeCellIconDiv);
+					$(routeDiv).append(routeTypeCellDiv);
 
 					var routeNameCellDiv = jQuery('<div/>', {
 						class: 'routeName-cell',
-						text: routeTime.RouteName
+						text: routeTime.Route
 					});
 					$(routeDiv).append(routeNameCellDiv);
 
-					routeTime.forEach(function(time){
-
-						var routeForecastCellDiv = jQuery('<div/>', {
+					var routeForecastCellDiv = jQuery('<div/>', {
 							class: 'routeForecast-cell'
 						});
-						
-						
+					
+					routeTime.Time.forEach(function(time){
 
-
-
-						
-
-						$(routeDiv).append(routeForecastCellDiv);
-						$(bodyDiv).append(routeDiv);
+						var divTime = jQuery('<div/>', {
+							class: 'forecast-time',
+							html: time + 'мин.'
+						});
+						$(routeForecastCellDiv).append(divTime);
 					});
+						
+					$(routeDiv).append(routeForecastCellDiv);
+					$(bodyDiv).append(routeDiv);
+					
 				});
 		    });
 
