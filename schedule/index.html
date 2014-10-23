@@ -98,9 +98,10 @@
 					
 					routeTime.Time.forEach(function(time){
 
+						var minutes = Math.round(time/60);
 						var divTime = jQuery('<div/>', {
 							class: 'forecast-time',
-							html: time + 'мин.'
+							html: minutes + ' мин.'
 						});
 						$(routeForecastCellDiv).append(divTime);
 					});

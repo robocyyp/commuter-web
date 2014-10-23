@@ -3,29 +3,30 @@ body{
   text-align: center;
 }
 div#mainForecastDiv{
-
 display:table-cell;
 vertical-align: middle;
 text-align: left;
 width:480px;
+background-color: #999
 
 }
 
 .forecastHeader{
    width: 100%;
-   font-size:16px;
+   font-size:28px;
+   text-align: center;
 }
 
 .forecastHeader .headerLabel{
    width: 100%;
-   text-align:left;
+   
 }
 
 
 
 .forecastBody{
    width: 100%;
-   font-size:16px;
+   font-size:24px;
 
 }
 
@@ -41,13 +42,19 @@ width:480px;
 .forecastBody .route{
    width: 100%;
    display: table;
+  margin:8px 0;
+border-bottom-width:1px;
+   border-bottom-style: dashed;
+   border-bottom-color: #fff;
+  
 }
 
 .route .routeType-cell{
   display: table-cell;
-  width: 15%;
+  width: 10%;
   vertical-align:middle;
-  text-align:center;  
+  text-align:center; 
+  
 }
 
 .route-cell .routeType-icon{
@@ -73,13 +80,21 @@ width:480px;
 .route .routeForecast-cell{
   display: table-cell;
   width: 70%;
-  text-align:right;
+  
+text-align:right;
+  
 }
 
 .routeForecast-cell .forecast-time{
-height: 30px;
-font-size: 16px;
-display: inline-block;
+height: 40px;
+text-align:right;
+font-size: 24px;
+float:right;
+display: table-cell;
+vertical-align:middle;
+line-height: 40px;
+margin: 0 0 0 15px;  
+  
 
 }
 
