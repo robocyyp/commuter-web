@@ -209,15 +209,18 @@
 			var forecastCurrentHeight = $('#'+id).height();
 			var forecastWidth = 600;
 			var forecastTopMargin = 0;
+			var automargin = "auto";
 
 			if(windowWidth < 600){
 				forecastWidth = windowWidth;
+				automargin = "0";
 			}
 			if(windowHeight>forecastCurrentHeight){
-				forecastTopMargin = (windowHeight - forecastCurrentHeight)/2
+				forecastTopMargin = (windowHeight - forecastCurrentHeight)/2;
+
 			}
 
-			$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px auto"});
+			$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px "+ automargin});
 		};
 
 		createShedule(routesSPB.Vehicles,'mainForecastDiv');
