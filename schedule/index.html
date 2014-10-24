@@ -5,6 +5,7 @@
 	<!--  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
 	<meta charset="utf-8">
 	<link rel='stylesheet' type='text/css' href='css/style.css' />
+	<link rel="shortcut icon" href="res/icon.ico">
 	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 
 	
@@ -15,7 +16,8 @@
 <script>
 		var routesSPB = {"Result":true,"Vehicles":[
 		{"RouteName":"16","TypeId":1,"StationGuid":"1670","TimeRemaining":138},
-		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":236},
+		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":180},
+		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":80},
 		{"RouteName":"345","TypeId":2,"StationGuid":"1670","TimeRemaining":396},
 		{"RouteName":"345","TypeId":3,"StationGuid":"1670","TimeRemaining":1737},
 		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":2172},
@@ -25,9 +27,10 @@
 
 		var stationName = "Площадь Ильича";
 
-		function createShedule(forecast){
+		function createShedule(forecast, id){
+			
 			var mainDiv =  jQuery('<div/>', {
-				id: 'mainForecastDiv'
+				id: id
 			});
 			var headerDiv = jQuery('<div/>', {
 				class: 'forecastHeader'
@@ -95,6 +98,10 @@
 					var routeForecastCellDiv = jQuery('<div/>', {
 							class: 'routeForecast-cell'
 						});
+
+					var routeForecastCellDivRight = jQuery('<div/>', {
+							class: 'right'
+						});
 					
 					routeTime.Time.forEach(function(time){
 
@@ -103,9 +110,9 @@
 							class: 'forecast-time',
 							html: minutes + ' мин.'
 						});
-						$(routeForecastCellDiv).append(divTime);
+						$(routeForecastCellDivRight).append(divTime);
 					});
-						
+					$(routeForecastCellDiv).append(routeForecastCellDivRight);	
 					$(routeDiv).append(routeForecastCellDiv);
 					$(bodyDiv).append(routeDiv);
 					
@@ -117,16 +124,33 @@
 				class: 'forecastFooter'
 			});
 
+			var rightFooter = jQuery('<div/>', {
+				class: 'right'
+			});
 
+			var updateText = jQuery('<div/>', {
+				class: 'text',
+				text: "Обновить"
+			});
+
+			var icon = jQuery('<div/>', {
+				class: 'icon'
+			});
+			var iconImg  = jQuery('<img/>', { src: "../res/icon.png"});
+
+			$(icon).append(iconImg);
+			$(rightFooter).append(updateText);
+			$(rightFooter).append(icon);
+			$(footerDiv).append(rightFooter);
 
 			$(mainDiv).append(headerDiv);
 			$(mainDiv).append(bodyDiv);
 			$(mainDiv).append(footerDiv);
-			if($('#mainForecastDiv').length ==0){
+			if($('#'+id).length ==0){
 				$('body').append(mainDiv);
 			}
 			else{
-				$('#mainForecastDiv').replaceWith(mainDiv);
+				$('#'+id).replaceWith(mainDiv);
 			}
 		};
 		function sortForecast(forecast){
@@ -178,7 +202,27 @@
 		    return routeTimeType;
 		};
 
-		createShedule(routesSPB.Vehicles);
+		// задать размеры и положение 
+		function setPositionForecast(id){
+			var windowHeight = $( window ).height();
+			var windowWidth = $( window ).width();
+			var forecastCurrentHeight = $('#'+id).height();
+			var forecastWidth = 600;
+			var forecastTopMargin = 0;
+
+			if(windowWidth < 600){
+				forecastWidth = windowWidth;
+			}
+			if(windowHeight>forecastCurrentHeight){
+				forecastTopMargin = (windowHeight - forecastCurrentHeight)/2
+			}
+
+			$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px auto"});
+		};
+
+		createShedule(routesSPB.Vehicles,'mainForecastDiv');
+		setPositionForecast('mainForecastDiv');
+		
 
 	</script>
 </html>
