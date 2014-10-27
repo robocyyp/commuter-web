@@ -145,6 +145,9 @@ function createShedule(forecast, id){
 				});
 				$(routeForecastCellDivRight).append(divTime);
 			});
+			$(routeForecastCellDiv).append(routeForecastCellDivRight);	
+				$(routeDiv).append(routeForecastCellDiv);
+				$(bodyDiv).append(routeDiv);
 		});
 	});
 	var footerDiv = jQuery('<div/>', {

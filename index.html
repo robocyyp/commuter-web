@@ -384,14 +384,14 @@ switch(infoWindowType){
       }
     });
 
-    bottomDiv = $(bottomDiv).append(jQuery('<div/>', {
+    var divShedule = jQuery('<div/>', {
       class: 'sheduleLink',
       css: {
           width: '100%',
           height:'30px',
           'text-align':'right'
       }
-    }));
+    });
 
     var divLink = jQuery('<div/>', {
       class: 'link'
@@ -401,17 +401,18 @@ switch(infoWindowType){
     var ahref = jQuery('<a/>',{
         href:  url,
         html: 'Открыть расписание'
-    };
+    });
      $(ahref).click(function(){
         var win = window.open(url, '_blank');
         if(win){
             //Browser has allowed it to be opened
             win.focus();
         }
-     })
+     });
 
     $(divLink).append(ahref);
-    $(bottomDiv).append(divLink);
+    $(divShedule).append(divLink);
+    $(bottomDiv).append(divShedule)
 
     $(mainDiv).append(headerDiv);
     divForTypes.forEach(function(v){
