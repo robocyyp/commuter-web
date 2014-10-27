@@ -58,6 +58,11 @@
 
 	var stationName = "Площадь Ильича";
 
+$.fn.urlHash = function()
+	{
+	  return window.location.hash.replace('#','');
+	};
+
 
 function requestStations(city, guid){
    var url = "http://nearbus.azurewebsites.net/NearBusService.svc/station/get?guid="+guid+"&city="+city+"&u=web";
@@ -621,10 +626,13 @@ function sortForecast(forecast){
 	};
 
 
-	var guid='129_0';
-	var city='ryazan';
+var urlhash = $.fn.urlHash();
+var arraySplit = urlhash.split('/');
+
+var guid=arraySplit[1];
+var city=arraySplit[0];
 	
-	requestStations( city,guid);
+requestStations( city,guid);
 
 	
 <<<<<<< HEAD
