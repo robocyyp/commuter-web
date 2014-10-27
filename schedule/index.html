@@ -261,6 +261,8 @@ function requestStations(city, guid){
 		if(windowWidth < 600){
 			forecastWidth = windowWidth;
 			automargin = "0";
+			// для телефона без отступа
+			forecastTopMargin = 0;
 		}
 		if(windowHeight>forecastCurrentHeight){
 			forecastTopMargin = (windowHeight - forecastCurrentHeight)/2;
