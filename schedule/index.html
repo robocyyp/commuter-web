@@ -92,61 +92,61 @@ function createShedule(forecast, id){
 			    <img src="something.jpg" alt="" />
 			</div>*/
 	    }
-	var src;	
-	switch(routesTime.Type){
-		case 1:  src="../res/1.png";
-			break;
-		case 2:  src= "../res/2.png";
-			break;
-		case 3:  src= "../res/3.png";
-			break;
-		case 4:  src= "../res/4.png";
-			break;
-		case 5:  src= "../res/5.png";
-			break;
-		default:  src= "../res/1.png";
-			break;
-	}
-	
-	routesTime.Routes.forEach(function(routeTime){
-		var routeDiv = jQuery('<div/>', {
-			class: 'route'
-		});
-			var routeTypeCellDiv = jQuery('<div/>', {
-			class: 'routeType-cell'
-		});
-		var routeTypeCellIconDiv = jQuery('<div/>', {
-			class: 'routeType-icon'
-		});
-		var img = jQuery('<img/>', { src: src});
-		$(routeTypeCellIconDiv).append(img);
-		$(routeTypeCellDiv).append(routeTypeCellIconDiv);
-		$(routeDiv).append(routeTypeCellDiv);
+		var src;	
+		switch(routesTime.Type){
+			case 1:  src="../res/1.png";
+				break;
+			case 2:  src= "../res/2.png";
+				break;
+			case 3:  src= "../res/3.png";
+				break;
+			case 4:  src= "../res/4.png";
+				break;
+			case 5:  src= "../res/5.png";
+				break;
+			default:  src= "../res/1.png";
+				break;
+		}
 
-		var routeNameCellDiv = jQuery('<div/>', {
-			class: 'routeName-cell',
-			text: routeTime.Route
-		});
-		$(routeDiv).append(routeNameCellDiv);
-
-		var routeForecastCellDiv = jQuery('<div/>', {
-				class: 'routeForecast-cell'
+		routesTime.Routes.forEach(function(routeTime){
+			var routeDiv = jQuery('<div/>', {
+				class: 'route'
 			});
-
-		var routeForecastCellDivRight = jQuery('<div/>', {
-				class: 'right'
-			});				
-		routeTime.Time.forEach(function(time){
-
-			var minutes = Math.round(time/60);
-			var divTime = jQuery('<div/>', {
-				class: 'forecast-time',
-				html: minutes + ' мин.'
+				var routeTypeCellDiv = jQuery('<div/>', {
+				class: 'routeType-cell'
 			});
-			$(routeForecastCellDivRight).append(divTime);
+			var routeTypeCellIconDiv = jQuery('<div/>', {
+				class: 'routeType-icon'
+			});
+			var img = jQuery('<img/>', { src: src});
+			$(routeTypeCellIconDiv).append(img);
+			$(routeTypeCellDiv).append(routeTypeCellIconDiv);
+			$(routeDiv).append(routeTypeCellDiv);
+
+			var routeNameCellDiv = jQuery('<div/>', {
+				class: 'routeName-cell',
+				text: routeTime.Route
+			});
+			$(routeDiv).append(routeNameCellDiv);
+
+			var routeForecastCellDiv = jQuery('<div/>', {
+					class: 'routeForecast-cell'
+				});
+
+			var routeForecastCellDivRight = jQuery('<div/>', {
+					class: 'right'
+				});				
+			routeTime.Time.forEach(function(time){
+
+				var minutes = Math.round(time/60);
+				var divTime = jQuery('<div/>', {
+					class: 'forecast-time',
+					html: minutes + ' мин.'
+				});
+				$(routeForecastCellDivRight).append(divTime);
+			});
 		});
 	});
-
 	var footerDiv = jQuery('<div/>', {
 		class: 'forecastFooter'
 	});
@@ -180,6 +180,7 @@ function createShedule(forecast, id){
 		$('#'+id).replaceWith(mainDiv);
 	}
 };
+
 function sortForecast(forecast){
 	var routeTimeType=[];
 	var types = [];
