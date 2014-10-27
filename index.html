@@ -386,7 +386,7 @@ switch(infoWindowType){
 
     bottomDiv = $(bottomDiv).append(jQuery('<div/>', {
       class: 'sheduleLink',
-      html: '<a href="http://robocyyp.github.io/commuter-web">Открыть расписание</a>',
+      html: '<div class="link"><a href="http://robocyyp.github.io/commuter-web/schedule/index.html#'+selectedStation.Station.CityName +'/'+selectedStation.Station.GUID+ '">Открыть расписание</a></div>',
       css: {
           width: '100%',
           height:'30px',
