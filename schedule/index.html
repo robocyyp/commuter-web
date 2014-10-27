@@ -15,208 +15,94 @@
 
 </body>
 <script>
-	var routesSPB = {"Result":true,"Vehicles":[
-	{"RouteName":"16","TypeId":1,"StationGuid":"1670","TimeRemaining":138},
-	{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":180},
-	{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":80},
-	{"RouteName":"345","TypeId":2,"StationGuid":"1670","TimeRemaining":396},
-	{"RouteName":"345","TypeId":3,"StationGuid":"1670","TimeRemaining":1737},
-	{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":2172},
-	{"RouteName":"345","TypeId":1,"StationGuid":"1670","TimeRemaining":2384},
-	{"RouteName":"23","TypeId":2,"StationGuid":"1670","TimeRemaining":2974}
-<<<<<<< HEAD
-<<<<<<< HEAD
-	]};
+		var routesSPB = {"Result":true,"Vehicles":[
+		{"RouteName":"16","TypeId":1,"StationGuid":"1670","TimeRemaining":138},
+		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":180},
+		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":80},
+		{"RouteName":"345","TypeId":2,"StationGuid":"1670","TimeRemaining":396},
+		{"RouteName":"345","TypeId":3,"StationGuid":"1670","TimeRemaining":1737},
+		{"RouteName":"99","TypeId":1,"StationGuid":"1670","TimeRemaining":2172},
+		{"RouteName":"345","TypeId":1,"StationGuid":"1670","TimeRemaining":2384},
+		{"RouteName":"23","TypeId":2,"StationGuid":"1670","TimeRemaining":2974}
+			]};
 
-	var stationName = "Площадь Ильича";
+		var stationName = "Площадь Ильича";
 
-	//using window.location.hash
-	$.fn.urlHash = function()
-	{
-	  return window.location.hash.replace('#','');
-	};
-	
-
-	function createShedule(forecast, id){
-
-		var mainDiv =  jQuery('<div/>', {
-			id: id
-		});
-		var headerDiv = jQuery('<div/>', {
-			class: 'forecastHeader'
-		});
-		headerDiv = $(headerDiv).append(jQuery('<div/>', {
-			class: 'headerLabel',
-			text: stationName
-
-		}));
-
-=======
-=======
->>>>>>> FETCH_HEAD
-		]};
-
-	var stationName = "Площадь Ильича";
-
-
-function requestStations(city, guid){
-   var url = "http://nearbus.azurewebsites.net/NearBusService.svc/station/get?guid="+guid+"&city="+city+"&u=web";
-   $.ajax({
-    url: url,
-    crossDomain: true,
-    //context: document.body,
-    success: function(responseData, textStatus, jqXHR){
-     var markers = responseData;
-     if(responseData.Result == true){
-      // first todo filter result
-      createShedule(responseData.Vehicles,'mainForecastDiv');
-	  setPositionForecast('mainForecastDiv');
-    }
-  },
-  error: function (responseData, textStatus, errorThrown) {
-    alert('POST failed.');
-  }
-});
-
-}
-
-	function createShedule(forecast, id){
-		
-		var mainDiv =  jQuery('<div/>', {
-			id: id
-		});
-		var headerDiv = jQuery('<div/>', {
-			class: 'forecastHeader'
-		});
-		headerDiv = $(headerDiv).append(jQuery('<div/>', {
-			class: 'headerLabel',
-			text: stationName
+		function createShedule(forecast, id){
 			
-		}));
+			var mainDiv =  jQuery('<div/>', {
+				id: id
+			});
+			var headerDiv = jQuery('<div/>', {
+				class: 'forecastHeader'
+			});
+			headerDiv = $(headerDiv).append(jQuery('<div/>', {
+				class: 'headerLabel',
+				text: stationName
+				
+			}));
 
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
-		var bodyDiv = jQuery('<div/>', {
-			class: 'forecastBody'
-		});
+			var bodyDiv = jQuery('<div/>', {
+				class: 'forecastBody'
+			});
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 			// полностью отсортированный массив
 			var routeTimeType = sortForecast(forecast);
 			var adCount = 0;
-			routeTimeType.forEach(function(routesTime){
-				adCount++;
-				if(adCount == 3 || adCount == 5){
+		    routeTimeType.forEach(function(routesTime){
+			    adCount++;
+			    if(adCount == 3 || adCount == 5){
 			    	//todo добавить рекламный блок
 			    	/*<div id="container">
 					    <img src="something.jpg" alt="" />
 					</div>*/
-				}
-
+			    }
+		    	
 				
 				var src;	
 				switch(routesTime.Type){
 					case 1:  src="../res/1.png";
-					break;
+						break;
 					case 2:  src= "../res/2.png";
-					break;
+						break;
 					case 3:  src= "../res/3.png";
-					break;
+						break;
 					case 4:  src= "../res/4.png";
-					break;
+						break;
 					case 5:  src= "../res/5.png";
-					break;
+						break;
 					default:  src= "../res/1.png";
-					break;
+						break;
 				}
 				
 				routesTime.Routes.forEach(function(routeTime){
 					var routeDiv = jQuery('<div/>', {
 						class: 'route'
 					});
-					var routeTypeCellDiv = jQuery('<div/>', {
+						var routeTypeCellDiv = jQuery('<div/>', {
 						class: 'routeType-cell'
 					});
 					var routeTypeCellIconDiv = jQuery('<div/>', {
 						class: 'routeType-icon'
-=======
-=======
->>>>>>> FETCH_HEAD
-		// полностью отсортированный массив
-		var routeTimeType = sortForecast(forecast);
-		var adCount = 0;
-	    routeTimeType.forEach(function(routesTime){
-		    adCount++;
-		    if(adCount == 3 || adCount == 5){
-		    	//todo добавить рекламный блок
-		    	/*<div id="container">
-				    <img src="something.jpg" alt="" />
-				</div>*/
-		    }
-	    	
-			
-			var src;	
-			switch(routesTime.Type){
-				case 1:  src="../res/1.png";
-					break;
-				case 2:  src= "../res/2.png";
-					break;
-				case 3:  src= "../res/3.png";
-					break;
-				case 4:  src= "../res/4.png";
-					break;
-				case 5:  src= "../res/5.png";
-					break;
-				default:  src= "../res/1.png";
-					break;
-			}
-			
-			routesTime.Routes.forEach(function(routeTime){
-				var routeDiv = jQuery('<div/>', {
-					class: 'route'
-				});
-					var routeTypeCellDiv = jQuery('<div/>', {
-					class: 'routeType-cell'
-				});
-				var routeTypeCellIconDiv = jQuery('<div/>', {
-					class: 'routeType-icon'
-				});
-				var img = jQuery('<img/>', { src: src});
-				$(routeTypeCellIconDiv).append(img);
-				$(routeTypeCellDiv).append(routeTypeCellIconDiv);
-				$(routeDiv).append(routeTypeCellDiv);
-
-				var routeNameCellDiv = jQuery('<div/>', {
-					class: 'routeName-cell',
-					text: routeTime.Route
-				});
-				$(routeDiv).append(routeNameCellDiv);
-
-				var routeForecastCellDiv = jQuery('<div/>', {
-						class: 'routeForecast-cell'
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
 					});
+					var img = jQuery('<img/>', { src: src});
+					$(routeTypeCellIconDiv).append(img);
+					$(routeTypeCellDiv).append(routeTypeCellIconDiv);
+					$(routeDiv).append(routeTypeCellDiv);
 
-				var routeForecastCellDivRight = jQuery('<div/>', {
-						class: 'right'
+					var routeNameCellDiv = jQuery('<div/>', {
+						class: 'routeName-cell',
+						text: routeTime.Route
 					});
-<<<<<<< HEAD
-<<<<<<< HEAD
 					$(routeDiv).append(routeNameCellDiv);
 
 					var routeForecastCellDiv = jQuery('<div/>', {
-						class: 'routeForecast-cell'
-					});
+							class: 'routeForecast-cell'
+						});
 
 					var routeForecastCellDivRight = jQuery('<div/>', {
-						class: 'right'
-					});
+							class: 'right'
+						});
 					
 					routeTime.Time.forEach(function(time){
 
@@ -226,66 +112,56 @@ function requestStations(city, guid){
 							html: minutes + ' мин.'
 						});
 						$(routeForecastCellDivRight).append(divTime);
-=======
-=======
->>>>>>> FETCH_HEAD
-				
-				routeTime.Time.forEach(function(time){
-
-					var minutes = Math.round(time/60);
-					var divTime = jQuery('<div/>', {
-						class: 'forecast-time',
-						html: minutes + ' мин.'
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
 					});
-					$(routeForecastCellDivRight).append(divTime);
+					$(routeForecastCellDiv).append(routeForecastCellDivRight);	
+					$(routeDiv).append(routeForecastCellDiv);
+					$(bodyDiv).append(routeDiv);
+					
 				});
-<<<<<<< HEAD
-});
+		    });
 
 
-var footerDiv = jQuery('<div/>', {
-	class: 'forecastFooter'
-});
+			var footerDiv = jQuery('<div/>', {
+				class: 'forecastFooter'
+			});
 
-var rightFooter = jQuery('<div/>', {
-	class: 'right'
-});
+			var rightFooter = jQuery('<div/>', {
+				class: 'right'
+			});
 
-var updateText = jQuery('<div/>', {
-	class: 'text',
-	text: "Обновить"
-});
+			var updateText = jQuery('<div/>', {
+				class: 'text',
+				text: "Обновить"
+			});
 
-var icon = jQuery('<div/>', {
-	class: 'icon'
-});
-var iconImg  = jQuery('<img/>', { src: "../res/icon.png"});
+			var icon = jQuery('<div/>', {
+				class: 'icon'
+			});
+			var iconImg  = jQuery('<img/>', { src: "../res/icon.png"});
 
-$(icon).append(iconImg);
-$(rightFooter).append(updateText);
-$(rightFooter).append(icon);
-$(footerDiv).append(rightFooter);
+			$(icon).append(iconImg);
+			$(rightFooter).append(updateText);
+			$(rightFooter).append(icon);
+			$(footerDiv).append(rightFooter);
 
-$(mainDiv).append(headerDiv);
-$(mainDiv).append(bodyDiv);
-$(mainDiv).append(footerDiv);
-if($('#'+id).length ==0){
-	$('body').append(mainDiv);
-}
-else{
-	$('#'+id).replaceWith(mainDiv);
-}
-};
-function sortForecast(forecast){
-	var routeTimeType=[];
-	var types = [];
-	forecast.forEach(function(v){
-		if(!types[v.TypeId]){
-			types[v.TypeId] = v.TypeId;
-		}
-	});
+			$(mainDiv).append(headerDiv);
+			$(mainDiv).append(bodyDiv);
+			$(mainDiv).append(footerDiv);
+			if($('#'+id).length ==0){
+				$('body').append(mainDiv);
+			}
+			else{
+				$('#'+id).replaceWith(mainDiv);
+			}
+		};
+		function sortForecast(forecast){
+			var routeTimeType=[];
+			var types = [];
+		    forecast.forEach(function(v){
+		      if(!types[v.TypeId]){
+		        types[v.TypeId] = v.TypeId;
+		      }
+		    });
 		    // отсортированные типы маршрутов 
 		    types.sort(function(a, b){return a-b});
 		    
@@ -302,11 +178,11 @@ function sortForecast(forecast){
 		    	// теперь назодим уникальные маршруты и сортируем их
 		    	var routeUnique=[];
 		    	routesArray.forEach(function(r){
-		    		if(!routeUnique[r.Name]){
-		    			routeUnique[r.Name] = r.Name;
-		    		}
-		    	});
-		    	routeUnique.sort();
+				    if(!routeUnique[r.Name]){
+				       routeUnique[r.Name] = r.Name;
+				    }
+				});
+				routeUnique.sort();
 				// теперь для каждого маршрута находим его время и сортируем его по убыванию
 				var routeTime=[];
 				routeUnique.forEach(function(r){
@@ -322,7 +198,7 @@ function sortForecast(forecast){
 				});
 				var objWithType = {Type:v, Routes:routeTime};
 				routeTimeType.push(objWithType);
-			});
+		    });
 
 		    return routeTimeType;
 		};
@@ -342,296 +218,15 @@ function sortForecast(forecast){
 			}
 			if(windowHeight>forecastCurrentHeight){
 				forecastTopMargin = (windowHeight - forecastCurrentHeight)/2;
-=======
-				$(routeForecastCellDiv).append(routeForecastCellDivRight);	
-				$(routeDiv).append(routeForecastCellDiv);
-				$(bodyDiv).append(routeDiv);
-				
-			});
-	    });
 
+			}
 
-		var footerDiv = jQuery('<div/>', {
-			class: 'forecastFooter'
-		});
-
-		var rightFooter = jQuery('<div/>', {
-			class: 'right'
-		});
-
-		var updateText = jQuery('<div/>', {
-			class: 'text',
-			text: "Обновить"
-		});
-
-		var icon = jQuery('<div/>', {
-			class: 'icon'
-		});
-		var iconImg  = jQuery('<img/>', { src: "../res/icon.png"});
-
-		$(icon).append(iconImg);
-		$(rightFooter).append(updateText);
-		$(rightFooter).append(icon);
-		$(footerDiv).append(rightFooter);
-
-		$(mainDiv).append(headerDiv);
-		$(mainDiv).append(bodyDiv);
-		$(mainDiv).append(footerDiv);
-		if($('#'+id).length ==0){
-			$('body').append(mainDiv);
-		}
-		else{
-			$('#'+id).replaceWith(mainDiv);
-		}
-	};
-
-	function naturalSorter(as, bs){
-	    var a, b, a1, b1, i= 0, n, L,
-	    rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
-	    if(as=== bs) return 0;
-	    a= as.toLowerCase().match(rx);
-	    b= bs.toLowerCase().match(rx);
-	    L= a.length;
-	    while(i<L){
-	        if(!b[i]) return 1;
-	        a1= a[i],
-	        b1= b[i++];
-	        if(a1!== b1){
-	            n= a1-b1;
-	            if(!isNaN(n)) return n;
-	            return a1>b1? 1:-1;
-	        }
-	    }
-	    return b[i]? -1:0;
-	}
-	
-	function sortForecast(forecast){
-		var routeTimeType=[];
-		var types = [];
-	    forecast.forEach(function(v){
-	      if(!types[v.TypeId]){
-	        types[v.TypeId] = v.TypeId;
-	      }
-	    });
-	    // отсортированные типы маршрутов 
-	    types.sort(function(a, b){return a-b});
-	    
-	    // пройдемся по массиву и собирем все маршруты для этого типа
-	    types.forEach(function(v){
-
-	    	var routesArray = [];
-	    	forecast.forEach(function(f){
-	    		if(f.TypeId == v){
-	    			var routeObj = {Name:f.RouteName, TimeRemaining:f.TimeRemaining};
-	    			routesArray.push(routeObj);
-	    		}
-	    	});
-	    	// теперь назодим уникальные маршруты и сортируем их
-	    	var routeUnique=[];
-	    	routesArray.forEach(function(r){
-			    if(!routeUnique[r.Name]){
-			       routeUnique[r.Name] = r.Name;
-			    }
-			});
-
-			routeUnique.sort(function(o1, o2) {
-			    return naturalSorter(o1, o2);
-			});
-			// теперь для каждого маршрута находим его время и сортируем его по убыванию
-			var routeTime=[];
-			routeUnique.forEach(function(r){
-				var times = [];
-				routesArray.forEach(function(a){
-					if(a.Name == r){
-						times.push(a.TimeRemaining);
-					}
-				});
-				times.sort(function(a, b){return a-b});
-				var obj = {Route:r, Time:times};
-				routeTime.push(obj);
-			});
-			var objWithType = {Type:v, Routes:routeTime};
-			routeTimeType.push(objWithType);
-	    });
->>>>>>> FETCH_HEAD
-
-	    return routeTimeType;
-	};
-
-	// задать размеры и положение 
-	function setPositionForecast(id){
-		var windowHeight =  window.innerHeight;
-		var windowWidth = screen.width;
-		var forecastCurrentHeight = $('#'+id). outerHeight( true );
-		var forecastWidth = 600;
-		var forecastTopMargin = 20;
-		var automargin = "auto";
-
-=======
-					});
-					$(routeForecastCellDivRight).append(divTime);
-				});
-				$(routeForecastCellDiv).append(routeForecastCellDivRight);	
-				$(routeDiv).append(routeForecastCellDiv);
-				$(bodyDiv).append(routeDiv);
-				
-			});
-	    });
-
-
-		var footerDiv = jQuery('<div/>', {
-			class: 'forecastFooter'
-		});
-
-		var rightFooter = jQuery('<div/>', {
-			class: 'right'
-		});
-
-		var updateText = jQuery('<div/>', {
-			class: 'text',
-			text: "Обновить"
-		});
-
-		var icon = jQuery('<div/>', {
-			class: 'icon'
-		});
-		var iconImg  = jQuery('<img/>', { src: "../res/icon.png"});
-
-		$(icon).append(iconImg);
-		$(rightFooter).append(updateText);
-		$(rightFooter).append(icon);
-		$(footerDiv).append(rightFooter);
-
-		$(mainDiv).append(headerDiv);
-		$(mainDiv).append(bodyDiv);
-		$(mainDiv).append(footerDiv);
-		if($('#'+id).length ==0){
-			$('body').append(mainDiv);
-		}
-		else{
-			$('#'+id).replaceWith(mainDiv);
-		}
-	};
-
-	function naturalSorter(as, bs){
-	    var a, b, a1, b1, i= 0, n, L,
-	    rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
-	    if(as=== bs) return 0;
-	    a= as.toLowerCase().match(rx);
-	    b= bs.toLowerCase().match(rx);
-	    L= a.length;
-	    while(i<L){
-	        if(!b[i]) return 1;
-	        a1= a[i],
-	        b1= b[i++];
-	        if(a1!== b1){
-	            n= a1-b1;
-	            if(!isNaN(n)) return n;
-	            return a1>b1? 1:-1;
-	        }
-	    }
-	    return b[i]? -1:0;
-	}
-	
-	function sortForecast(forecast){
-		var routeTimeType=[];
-		var types = [];
-	    forecast.forEach(function(v){
-	      if(!types[v.TypeId]){
-	        types[v.TypeId] = v.TypeId;
-	      }
-	    });
-	    // отсортированные типы маршрутов 
-	    types.sort(function(a, b){return a-b});
-	    
-	    // пройдемся по массиву и собирем все маршруты для этого типа
-	    types.forEach(function(v){
-
-	    	var routesArray = [];
-	    	forecast.forEach(function(f){
-	    		if(f.TypeId == v){
-	    			var routeObj = {Name:f.RouteName, TimeRemaining:f.TimeRemaining};
-	    			routesArray.push(routeObj);
-	    		}
-	    	});
-	    	// теперь назодим уникальные маршруты и сортируем их
-	    	var routeUnique=[];
-	    	routesArray.forEach(function(r){
-			    if(!routeUnique[r.Name]){
-			       routeUnique[r.Name] = r.Name;
-			    }
-			});
-
-			routeUnique.sort(function(o1, o2) {
-			    return naturalSorter(o1, o2);
-			});
-			// теперь для каждого маршрута находим его время и сортируем его по убыванию
-			var routeTime=[];
-			routeUnique.forEach(function(r){
-				var times = [];
-				routesArray.forEach(function(a){
-					if(a.Name == r){
-						times.push(a.TimeRemaining);
-					}
-				});
-				times.sort(function(a, b){return a-b});
-				var obj = {Route:r, Time:times};
-				routeTime.push(obj);
-			});
-			var objWithType = {Type:v, Routes:routeTime};
-			routeTimeType.push(objWithType);
-	    });
-
-	    return routeTimeType;
-	};
-
-	// задать размеры и положение 
-	function setPositionForecast(id){
-		var windowHeight =  window.innerHeight;
-		var windowWidth = screen.width;
-		var forecastCurrentHeight = $('#'+id). outerHeight( true );
-		var forecastWidth = 600;
-		var forecastTopMargin = 20;
-		var automargin = "auto";
-
->>>>>>> FETCH_HEAD
-		if(windowWidth < 600){
-			forecastWidth = windowWidth;
-			automargin = "0";
-			// для телефона без отступа
-			forecastTopMargin = 0;
-		}
-		if(windowHeight>forecastCurrentHeight){
-			forecastTopMargin = (windowHeight - forecastCurrentHeight)/2;
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-		var urlhash = $.fn.urlHash();
-		var arraySplit = urlhash.split('/')
+			$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px "+ automargin});
+		};
 
 		createShedule(routesSPB.Vehicles,'mainForecastDiv');
 		setPositionForecast('mainForecastDiv');
-=======
-=======
-
->>>>>>> FETCH_HEAD
-		}
-
-		$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px "+ automargin});
-	};
-
-
-	var guid='129_0';
-	var city='ryazan';
-	
-	requestStations( city,guid);
-
-	
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
 		
 
 	</script>
-	</html>
+</html>
