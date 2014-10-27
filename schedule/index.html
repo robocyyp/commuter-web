@@ -260,6 +260,15 @@ var arraySplit = urlhash.split('/');
 
 var guid=arraySplit[1];
 var city=arraySplit[0];
+
+if(!urlhash || urlhash == '' || !guid || !city){
+	//открываем страницу с выбором остановки
+	var win = window.open('http://robocyyp.github.io/commuter-web', '_blank');
+	if(win){
+	    //Browser has allowed it to be opened
+	    win.focus();
+	}
+}
 	
 requestStations( city,guid);
 

@@ -386,7 +386,6 @@ switch(infoWindowType){
 
     bottomDiv = $(bottomDiv).append(jQuery('<div/>', {
       class: 'sheduleLink',
-      html: '<div class="link"><a href="http://robocyyp.github.io/commuter-web/schedule/#'+selectedStation.Station.CityName +'/'+selectedStation.Station.GUID+ '">Открыть расписание</a></div>',
       css: {
           width: '100%',
           height:'30px',
@@ -394,6 +393,25 @@ switch(infoWindowType){
       }
     }));
 
+    var divLink = jQuery('<div/>', {
+      class: 'link'
+    };
+
+    var url = 'http://robocyyp.github.io/commuter-web/schedule/#'+selectedStation.Station.CityName +'/'+selectedStation.Station.GUID;
+    var ahref = jQuery('<a/>',{
+        href:  url,
+        html: 'Открыть расписание'
+    };
+     $(ahref).click(function(){
+        var win = window.open(url, '_blank');
+        if(win){
+            //Browser has allowed it to be opened
+            win.focus();
+        }
+     })
+
+    $(divLink).append(ahref);
+    $(bottomDiv).append(divLink);
 
     $(mainDiv).append(headerDiv);
     divForTypes.forEach(function(v){
