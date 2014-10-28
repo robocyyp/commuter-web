@@ -228,6 +228,10 @@ function attachInfoWindow(marker) {
       v.close();
     });
     var content = generateContent(marker.title,'stationInfoWindow');
+    var windowWidth = screen.width; 
+    if(windowWidth < 800){
+      map.setCenter(marker.position);
+    }
     infowindowStation.setContent(content);
     infowindowStation.open(map, marker);
     openedInformationWindow.push(infowindowStation);
