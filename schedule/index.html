@@ -5,7 +5,7 @@
 	<!--  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
 	<meta charset="utf-8">
 	<link rel='stylesheet' type='text/css' href='css/style.css' />
-	<link rel="shortcut icon" href="res/icon.ico">
+	<link rel="shortcut icon" href="../res/icon.ico">
 	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -192,6 +192,7 @@ function createShedule(forecast, id){
 		class: 'forecastFooter'
 	});
 
+
 	var rightFooter = jQuery('<div/>', {
 		class: 'right'
 	});
@@ -220,6 +221,11 @@ function createShedule(forecast, id){
 	else{
 		$('#'+id).replaceWith(mainDiv);
 	}
+	$('.forecastFooter').click(function(){
+		if(stationInfo.guid != ''){
+			requestStationForecast(stationInfo.city,stationInfo.guid);
+		}
+	});
 };
 
 function sortForecast(forecast){
