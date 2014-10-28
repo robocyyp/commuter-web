@@ -10,8 +10,8 @@ div#mainForecastDiv{
 /*width:480px;*/
 /*background-color: #999;*/
 /*margin:0 auto;*/
-color: #000B54;
-background: #D6D6D6;;
+color: #ffffff;
+background: rgba(0, 0, 0, 0.87);
 -webkit-box-shadow: 0px 0px 22px 0px rgba(50, 50, 50, 0.65);
 -moz-box-shadow:    0px 0px 22px 0px rgba(50, 50, 50, 0.65);
 box-shadow:         0px 0px 22px 0px rgba(50, 50, 50, 0.65);
@@ -25,6 +25,7 @@ padding: 10px;
    width: 100%;
    font-size:28px;
    text-align: center;
+   background: rgba(255, 255, 255, 0.54);
 }
 
 .forecastHeader .headerLabel{
@@ -61,7 +62,7 @@ border-bottom-width:1px;
 
 .route .routeType-cell{
   display: table-cell;
-  width: 10%;
+  width: 14%;
   vertical-align:middle;
   text-align:center; 
   
@@ -79,10 +80,28 @@ border-bottom-width:1px;
 
 .route .routeName-cell{
   display: table-cell;
-  width: 15%;
+  width: 12%;
   text-align:left;
   vertical-align:middle;    
 }
+  .routeName-cell.bus{
+    color: #39A37E;
+  }
+  .routeName-cell.trolley{
+    color: #5EB0C6;
+  }
+  .routeName-cell.tramWay{
+    color: #E64C65;
+  }
+  .routeName-cell.ship{
+    color: #A83264;
+  }
+  .routeName-cell.marshrutka{
+    color: #F68C3D;
+  }
+  .routeName-cell.other{
+    color: ;
+  }
 
 
 
@@ -120,6 +139,7 @@ margin: 0 0 0 15px;
    font-size:16px;
    display:table;
    cursor: pointer;
+   background: rgba(255, 255, 255, 0.54);
 }
 
   .forecastFooter .right{

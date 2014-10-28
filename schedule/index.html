@@ -130,19 +130,26 @@ function createShedule(forecast, id){
 			    <img src="something.jpg" alt="" />
 			</div>*/
 	    }
-		var src;	
+		var src;
+		var typeName;	
 		switch(routesTime.Type){
 			case 1:  src="../res/1.png";
+				typeName = 'bus';
 				break;
 			case 2:  src= "../res/2.png";
+				typeName = 'trolley';
 				break;
 			case 3:  src= "../res/3.png";
+				typeName = 'tramWay';
 				break;
 			case 4:  src= "../res/4.png";
+				typeName = 'ship';
 				break;
 			case 5:  src= "../res/5.png";
+				typeName = 'marshrutka';
 				break;
 			default:  src= "../res/1.png";
+				typeName = 'other';
 				break;
 		}
 
@@ -162,7 +169,7 @@ function createShedule(forecast, id){
 			$(routeDiv).append(routeTypeCellDiv);
 
 			var routeNameCellDiv = jQuery('<div/>', {
-				class: 'routeName-cell',
+				class: 'routeName-cell '+ typeName,
 				text: routeTime.Route
 			});
 			$(routeDiv).append(routeNameCellDiv);
