@@ -17,8 +17,16 @@
 <script>
 	
 
-var stationName = "Площадь Ильича";
+var stationInfo{
+	name: "",
+	lat = 0,
+	lng = 0,
+	descr = "",
+	city = "",
+	guid = ""
+};
 
+var
 //using window.location.hash
 $.fn.urlHash = function()
 {
@@ -45,8 +53,38 @@ function naturalSorter(as, bs){
     return b[i]? -1:0;
 };
 
-function requestStations(city, guid){
-	var url = "http://nearbus.azurewebsites.net/NearBusService.svc/station/get?guid="+guid+"&city="+city+"&u=web";
+function requestStationInfo(city, guid){
+	var url = "http://nearbus-test.azurewebsites.net/NearBusService.svc/station/info?guid="+guid+"&city="+city+"&u=web";
+	$.ajax({
+		url: url,
+		crossDomain: true,
+		//context: document.body,
+		success: function(responseData, textStatus, jqXHR){
+			var markers = responseData;
+			if(responseData.Result == true){
+			  	// 
+			  	stationInfo.name = responseData.Station.Name;
+			  	stationInfo.lat = responseData.Station.Lat;
+			  	stationInfo.lng = responseData.Station.Lng;
+			  	stationInfo.guid = responseData.Station.GUID;
+			  	stationInfo.city = responseData.Station.CityName;
+			  	if(responseData.Station.End){
+			  		stationInfo.descr = responseData.Station.End;
+				} else if(responseData.Station.Description){
+			  		stationInfo.descr = responseData.Station.Description;
+				} 
+			  	requestStationForecast(stationInfo.city,stationInfo.guid);
+			}
+		},
+		error: function (responseData, textStatus, errorThrown) {
+			alert('POST failed.');
+		}
+	});
+
+};
+
+function requestStationForecast(city, guid){
+	var url = "http://nearbus-test.azurewebsites.net/NearBusService.svc/station/forecast?guid="+guid+"&city="+city+"&u=web";
 	$.ajax({
 		url: url,
 		crossDomain: true,
@@ -75,7 +113,7 @@ function createShedule(forecast, id){
 	});
 	headerDiv = $(headerDiv).append(jQuery('<div/>', {
 		class: 'headerLabel',
-		text: stationName
+		text: stationInfo.name
 		
 	}));
 	var bodyDiv = jQuery('<div/>', {
@@ -272,9 +310,8 @@ if(!urlhash || urlhash == '' || !guid || !city){
 	    win.focus();
 	}
 }
-	
-requestStations( city,guid);
 
+requestStationInfo(city,guid);	
 	
 	</script>
 	</html>
