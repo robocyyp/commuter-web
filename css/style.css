@@ -9,6 +9,9 @@ p.socialbuttons{
    z-index: 9;
    left: 10px;
 }
+.social_share{
+   font-size: 10px;
+}
  div.infoWindowSmallZoom {
  	width:100px; 
  	height:20px;
