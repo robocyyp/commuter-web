@@ -27,6 +27,10 @@ var infoWindowErrorGeo;
 var openedInformationWindow=[];
 
 function initialize() {
+
+  var height = window.innerHeight;
+$('p.socialbuttons').css( 'top', height - 30+'px');
+  
   var mapOptions = {
     zoom: 15
   };
@@ -177,14 +181,14 @@ function setMarkers(map, locations) {
   // increase in the X direction to the right and in
   // the Y direction down.
   var image = {
-    url: 'res/1.png',
+    url: 'res/ic_bus_128.png',
     // This marker is 20 pixels wide by 32 pixels tall.
     size: new google.maps.Size(32, 32),
-   //scaledSize: new google.maps.Size(32, 32),
+   scaledSize: new google.maps.Size(32, 32),
     // The origin for this image is 0,0.
     origin: new google.maps.Point(0,0)//,
     // The anchor for this image is the base of the flagpole at 0,32.
-    //anchor: new google.maps.Point(0, 32)
+    anchor: new google.maps.Point(0, 32)
   };
   // Shapes define the clickable region of the icon.
   // The type defines an HTML &lt;area&gt; element 'poly' which
@@ -454,6 +458,8 @@ $(document).on('click', '.social_share', function(){
     Share.go(this);
 });
 
+
+
 </script>
 </head>
 <body>
@@ -462,10 +468,12 @@ $(document).on('click', '.social_share', function(){
     <button class="social_share" data-type="vk">ВКонтакте</button>
     <button class="social_share" data-type="fb">Facebook</button>
     <button class="social_share" data-type="gg">Google +</button>
+    <!-- 
+    <button class="social_share" data-type="ok">Одноклассники</button>
     <button class="social_share" data-type="tw">Twitter</button>
     <button class="social_share" data-type="lj">LiveJournal</button>
-    <button class="social_share" data-type="ok">Одноклассники</button>
-    <button class="social_share" data-type="mr">Mail.Ru</button>
+    <button class="social_share" data-type="mr">Mail.Ru</button> 
+    -->
 </p>
   <div id="map-canvas"></div>
   <div id="stopWindow"></div>
