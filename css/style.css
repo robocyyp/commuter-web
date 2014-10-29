@@ -4,15 +4,19 @@
       padding: 0px
     }
 
-
+p.socialbuttons{
+   position: absolute;
+   z-index: 9;
+   left: 90px;
+}
  div.infoWindowSmallZoom {
  	width:100px; 
  	height:20px;
  }   
 
  div.infoWindowErrorGeo {
- 	width:400px; 
- 	height:20px;
+ 	width:200px; 
+ 	height:40px;
  }  
 /* div.infoWindowErrorGeo {
  	width:400px; 

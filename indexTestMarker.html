@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+
+  <link rel='stylesheet' type='text/css' href='css/style.css' />
+  <link rel="shortcut icon" href="res/icon.ico">
+  <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/share.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+  <script>
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see a blank space instead of the map, this
+// is probably because you have denied permission for location sharing.
+
+var map;
+var allStops = [];
+var newStops = [];
+var globalZIndex = 1;
+var lastSearchedPoint;
+var pos; 
+var infowindow ;
+var infoWindowErrorGeo;
+var openedInformationWindow=[];
+var marker;
+
+
+function initialize() {
+  var mapOptions = {
+    zoom: 15
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+
+    map.setCenter(new google.maps.LatLng(55.751244, 37.618423));
+    setMarker();
+};
+  
+function setMarker(){
+  var image = {
+    url: 'res/1.png'//,
+    // This marker is 20 pixels wide by 32 pixels tall.
+    //size: new google.maps.Size(32, 32),
+   //scaledSize: new google.maps.Size(32, 32),
+    // The origin for this image is 0,0.
+    //origin: new google.maps.Point(0,0)//,
+    // The anchor for this image is the base of the flagpole at 0,32.
+    //anchor: new google.maps.Point(0, 32)
+  };
+
+  var myLatLng = new google.maps.LatLng(55.752244, 37.619423);
+   marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image,
+        //shape: shape,
+        title: "!!",
+        zIndex: 99
+      });
+
+   google.maps.event.addListener(marker, 'click', function() {
+    var infowindowContent = generateContent(marker, 'stationInfoWindow');
+    var infowindowStation = new google.maps.InfoWindow({
+      content: infowindowContent,
+      map:map
+    });
+    infowindowStation.open(map, marker);
+
+  });
+
+};
+
+function generateContent(dataForContent, infoWindowType){
+  if(!infoWindowType){
+    return dataForContent;
+  }
+  var htmlContent = "";
+  switch(infoWindowType){
+    case 'stationInfoWindow': 
+      
+      // jQuery('<div/>', {
+      // id: 'mainStationDiv',
+      // css: {
+      //     width: '300px',
+      //     color: 'green'
+      // },
+      // click: function(){
+      //     alert('Foo has been clicked!');
+      // }
+
+      var windowWidth = 100;
+      var selectedStation;
+
+      var mainDiv = jQuery('<div/>', {
+        id: 'mainStationDiv',
+        css: {
+            width: windowWidth+'px'
+        }
+      });
+      var headerDiv = jQuery('<div/>', {
+        id: 'headerDiv',
+        css: {
+            width: '100%',
+            'font-size':'16px'
+        }
+      });
+
+      headerDiv = $(headerDiv).append(jQuery('<div/>', {
+        id: 'headerLabel',
+        text: "name",
+        css: {
+            width: '100%',
+           // height:'40px',
+            'text-align':'left'
+        }
+      }));
+
+      var types = [1]; 
+      var divForTypes = [];
+      for (var t in types){
+        var divType = jQuery('<div/>', {
+          id: 'type'+t+'Div',
+          css: {
+              width: '100%',
+              'margin-top': '10px'
+          }
+        });
+
+        var divIcon = jQuery('<div/>', {
+        css: {
+          'background': 'url(res/'+t+'.png) no-repeat center',
+          //'background-size': 'cover',
+          'width':  '40px',
+          'height': '32px',
+          'vertical-align': 'top',
+          'display':'inline-block'
+        }});
+
+        var placeForStation = jQuery('<div/>', {
+        css: {
+          'width': windowWidth+'px',
+          'height': 'auto',
+          'vertical-align': 'top',
+          'display':'inline-block'
+        }});
+
+         var color = '#39A37E'
+        var divRoute = jQuery('<div/>', {
+          //id: v.Name+'_'+v.TypeId,
+          text: "121",
+          css: {
+          'background-color': color,
+           'min-width': '30px',
+          height:'20px'  ,
+          margin: '4px',
+          'font-weight':'bold',
+          color:'white',
+          'border-size':'1px',
+          'border-color': '#979797',
+           'display':'inline-block',
+           'text-align':'center'
+          }
+        });
+        $(placeForStation).append(divRoute);
+           
+  
+        $(divType).append(divIcon);
+        $(divType).append(placeForStation);
+        divForTypes.push(divType);
+      }
+      var bottomDiv = jQuery('<div/>', {
+        id: 'bottomDiv',
+        css: {
+            width: '100%'//,
+            //height: '30px'
+        }
+      });
+
+      var divShedule = jQuery('<div/>', {
+        class: 'sheduleLink',
+        css: {
+            width: '100%',
+            height:'30px',
+            'text-align':'right'
+        }
+      });
+
+      var divLink = jQuery('<div/>', {
+        class: 'link'
+      });
+
+      var url = 'http://robocyyp.github.io/commuter-web/schedule/#';
+      var ahref = jQuery('<a/>',{
+          href:  url,
+          html: 'Открыть расписание'
+      });
+       $(ahref).click(function(){
+          var win = window.open(url, '_blank');
+          if(win){
+              //Browser has allowed it to be opened
+              win.focus();
+          }
+       });
+
+      $(divLink).append(ahref);
+      $(divShedule).append(divLink);
+      $(bottomDiv).append(divShedule)
+
+      $(mainDiv).append(headerDiv);
+      divForTypes.forEach(function(v){
+        $(mainDiv).append(v);
+      });
+      $(mainDiv).append(bottomDiv);
+
+      var wrapDiv = jQuery('<div/>').append(mainDiv); 
+      htmlContent = $(wrapDiv).html();
+      
+
+      // .html(text)
+      // .appendTo($("#stopWindow")) //main div
+      // .click(function(){
+      //     $(this).remove();
+      // })
+      
+
+      break;  
+    default: 
+      htmlContent += dataForContent;
+
+      break;
+  }
+  return htmlContent;
+
+};
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+  // Все элементы класса .social_share считаем кнопками шаринга
+
+
+</script>
+</head>
+<body>
+
+  <div id="map-canvas"></div>
+  <div id="stopWindow"></div>
+</body>
+</html>
