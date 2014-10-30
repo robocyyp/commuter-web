@@ -289,8 +289,8 @@ function sortForecast(forecast){
 
 // задать размеры и положение 
 function setPositionForecast(id){
-	var windowHeight =  screen.height;
-	var windowWidth = screen.width;
+	var windowHeight =  (window.innerHeight > 0) ? window.innerHeight : screen.height;
+	var windowWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 	var forecastCurrentHeight = $('#'+id). outerHeight( true );
 	var forecastHeaderCurrentHeight = $('#'+id + ' .forecastHeader'). outerHeight( true );
 	var forecastBodyCurrentHeight = $('#'+id + ' .forecastBody'). outerHeight( true );
