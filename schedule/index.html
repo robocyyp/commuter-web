@@ -292,20 +292,34 @@ function setPositionForecast(id){
 	var windowHeight =  window.innerHeight;
 	var windowWidth = screen.width;
 	var forecastCurrentHeight = $('#'+id). outerHeight( true );
+	var forecastHeaderCurrentHeight = $('#'+id + ' .forecastHeader'). outerHeight( true );
+	var forecastBodyCurrentHeight = $('#'+id + ' .forecastBody'). outerHeight( true );
+	var forecastFooterCurrentHeight = $('#'+id + ' .forecastFooter'). outerHeight( true );
 	var forecastWidth = 600;
 	var forecastTopMargin = 20;
 	var automargin = "auto";
-	if(windowWidth < 600){
-		forecastWidth = windowWidth;
-		automargin = "0";
-		// для телефона без отступа
-		forecastTopMargin = 0;
-	}
+	var padding = 10;
+
+	
 	if(windowHeight>forecastCurrentHeight){
-		forecastTopMargin = (windowHeight - forecastCurrentHeight)/2;
+		forecastTopMargin = 40;
+	}
+	if(windowWidth < 600){
+		forecastWidth = windowWidth - padding*2;
+		automargin = 0;
+		// для телефона c маленьким отступом
+		forecastTopMargin = 10;
+	} else{
+		forecastWidth += -padding*2
 	}
 
-	$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px "+ automargin});
+
+	if(forecastTopMargin*2 + forecastBodyCurrentHeight + forecastHeaderCurrentHeight + forecastFooterCurrentHeight <  windowHeight){
+		var heightForBody = windowHeight - forecastTopMargin*2 - forecastHeaderCurrentHeight - forecastFooterCurrentHeight - padding*2;
+		$('#'+id+ ' .forecastBody').css({height:heightForBody+'px'});
+	}
+
+	$('#'+id).css({width:forecastWidth+'px', margin: forecastTopMargin+ "px "+ automargin, padding: padding+'px'});
 };
 
 
