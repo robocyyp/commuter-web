@@ -7,7 +7,7 @@
 	<link rel='stylesheet' type='text/css' href='css/style.css' />
 	<link rel="shortcut icon" href="../res/icon.ico">
 	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
 
 	
 </head>
@@ -289,7 +289,7 @@ function sortForecast(forecast){
 
 // задать размеры и положение 
 function setPositionForecast(id){
-	var windowHeight =  window.innerHeight;
+	var windowHeight =  screen.height;
 	var windowWidth = screen.width;
 	var forecastCurrentHeight = $('#'+id). outerHeight( true );
 	var forecastHeaderCurrentHeight = $('#'+id + ' .forecastHeader'). outerHeight( true );
