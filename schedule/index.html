@@ -236,7 +236,12 @@ function createShedule(forecast, id){
 	}
 	$('.forecastFooter').click(function(){
 		if(stationInfo.guid != ''){
+			analytics.track('Manual Update Button click', {
+			  object: 'button',
+			  type: 'click'
+			});
 			requestStationForecast(stationInfo.city,stationInfo.guid);
+			
 		}
 	});
 };
