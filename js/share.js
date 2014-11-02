@@ -18,7 +18,7 @@ Share = {
                     url:        location.href,  // какую ссылку шарим
                     count_url:  location.href,  // для какой ссылки крутим счётчик
                     title:      document.title, // заголовок шаринга
-                    image:        '../res/icon.png',             // картинка шаринга
+                    image:        'http://robocyyp.github.io/commuter-web/res/icon.png',             // картинка шаринга
                     text:       'Веб-сервис для слежения за общественным транспортом в 35 городах России',             // текст шаринга
                 },
                 $(_element).data(), // Если параметры заданы в data, то читаем их
@@ -49,7 +49,7 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                image:  '../res/icon.png',
+                image:  'http://robocyyp.github.io/commuter-web/res/icon.png',
                 text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
@@ -78,7 +78,7 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                image:  '../res/icon.png',
+                image:  'http://robocyyp.github.io/commuter-web/res/icon.png',
                 text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
