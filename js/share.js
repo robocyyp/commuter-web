@@ -18,8 +18,8 @@ Share = {
                     url:        location.href,  // какую ссылку шарим
                     count_url:  location.href,  // для какой ссылки крутим счётчик
                     title:      document.title, // заголовок шаринга
-                    image:        '',             // картинка шаринга
-                    text:       '',             // текст шаринга
+                    image:        '../res/icon.png',             // картинка шаринга
+                    text:       'Веб-сервис для слежения за общественным транспортом в 35 городах России',             // текст шаринга
                 },
                 $(_element).data(), // Если параметры заданы в data, то читаем их
                 _options            // Параметры из вызова метода имеют наивысший приоритет
@@ -49,8 +49,8 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                image:  '',
-                text:   '',
+                image:  '../res/icon.png',
+                text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
         return 'http://vkontakte.ru/share.php?'
@@ -65,7 +65,7 @@ Share = {
     ok: function(_options) {
         var options = $.extend({
                 url:    location.href,
-                text:   '',
+                text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
         return 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1'
@@ -78,8 +78,8 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                image:  '',
-                text:   '',
+                image:  '../res/icon.png',
+                text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
         return 'http://www.facebook.com/sharer.php?s=100'
@@ -94,7 +94,7 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                text:   '',
+                text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
         return 'http://livejournal.com/update.bml?'
@@ -122,8 +122,8 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                image:  '',
-                text:   '',
+                image:  '../res/icon.png',
+                text:   'Веб-сервис для слежения за общественным транспортом в 35 городах России',
             }, _options);
 
         return 'http://connect.mail.ru/share?'

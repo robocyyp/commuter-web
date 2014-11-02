@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Geolocation</title>
+  <title>Commuter: Городской транспорт. Web версия.</title>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
 
@@ -465,7 +465,15 @@ function generateContent(dataForContent, infoWindowType){
   google.maps.event.addDomListener(window, 'load', initialize);
   // Все элементы класса .social_share считаем кнопками шаринга
 $(document).on('click', '.social_share', function(){
+
+var share = $(this).attr('data-type');
+  analytics.track('Share Button '+share+' click', {
+        object: 'button',
+        type: 'click'
+      });
+
     Share.go(this);
+
 });
 
 
@@ -474,7 +482,7 @@ $(document).on('click', '.social_share', function(){
 </head>
 <body>
 
-<p class="socialbuttons">Поделиться:
+<p class="socialbuttons">
     <button class="social_share" data-type="vk">ВКонтакте</button>
     <button class="social_share" data-type="fb">Facebook</button>
     <button class="social_share" data-type="gg">Google +</button>
