@@ -123,7 +123,10 @@ $('p.socialbuttons').css( 'top', height - 45+'px');
       handleNoGeolocation(false);
     }
   }
-
+  
+  if(checkZoom() == true){
+    checkNeedRequest();
+  }
   google.maps.event.addListener(map, 'center_changed', function() {
     
     
@@ -334,18 +337,45 @@ function attachInfoWindow(marker) {
       v.close();
     });
     var content = generateContent(marker.title,'stationInfoWindow');
+  
     //var windowWidth = window.innerWidth 
    // if(windowWidth < 800){
     //  map.panTo(marker.getPosition());
     //}
     infowindowStation.setContent(content);
     infowindowStation.open(map, marker);
+    addEventClickForShedule();
     openedInformationWindow=[];
     openedInformationWindow.push(infowindowStation);
     map.panTo(marker.getPosition());
   });
 }
 
+function addEventClickForShedule(){
+  $('.shedule-url').click(function(){
+    var currentCenterPoint = map.getCenter();
+    var lat='', lng='';
+    if(currentCenterPoint){
+      lng = currentCenterPoint.B;
+      lat = currentCenterPoint.k;
+    }
+    setCookie('lat', lat, {expires:20000000});
+    setCookie('lng', lng, {expires:20000000});
+    var hashString = '#'+lat+'&'+lng;
+    //изменить URL
+    if(history.pushState) {
+      history.pushState(null, null, hashString);
+    }
+    else {
+        location.hash = hashString;
+    }
+    var win = window.open(url, '_blank');
+    if(win){
+        //Browser has allowed it to be opened
+        win.focus();
+    }
+  });
+}
 var getDistance = function(p1, p2) {
   var R = 6378137; // Earth’s mean radius in meter
   var dLat = rad(p2.lat() - p1.lat());
@@ -512,31 +542,9 @@ function generateContent(dataForContent, infoWindowType){
       var url = 'http://robocyyp.github.io/commuter-web/schedule/#'+selectedStation.Station.CityName +'/'+selectedStation.Station.GUID;
       var ahref = jQuery('<a/>',{
           href:  url,
-          html: 'Открыть расписание'
+          html: 'Открыть расписание',
+          class: 'shedule-url'
       });
-       $(ahref).click(function(){
-          var currentCenterPoint = map.getCenter();
-          var lat='', lng='';
-          if(currentCenterPoint){
-            lng = currentCenterPoint.B;
-            lat = currentCenterPoint.k;
-          }
-          setCookie('lat', lat, {expires:20000000});
-          setCookie('lng', lng, {expires:20000000});
-          var hashString = '#'+lat+'&'+lng;
-          //изменить URL
-          if(history.pushState) {
-            history.pushState(null, null, hashString);
-          }
-          else {
-              location.hash = hashString;
-          }
-          var win = window.open(url, '_blank');
-          if(win){
-              //Browser has allowed it to be opened
-              win.focus();
-          }
-       });
 
       $(divLink).append(ahref);
       $(divShedule).append(divLink);
