@@ -9,6 +9,7 @@
   <link rel="shortcut icon" href="res/icon.ico">
   <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/share.js"></script>
+  <script type="text/javascript" src="js/cookies.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
 
@@ -36,6 +37,32 @@ var infowindow ;
 var infoWindowErrorGeo;
 var openedInformationWindow=[];
 
+
+
+//setCookie('lat', $(this).attr('_id'), {expires:20000000});
+
+
+
+
+var waitForFinalEvent = (function () {
+  var timers = {};
+  return function (callback, ms, uniqueId) {
+    if (!uniqueId) {
+      uniqueId = "Don't call this twice without a uniqueId";
+    }
+    if (timers[uniqueId]) {
+      clearTimeout (timers[uniqueId]);
+    }
+    timers[uniqueId] = setTimeout(callback, ms);
+  };
+})();
+
+//using window.location.hash
+$.fn.urlHash = function()
+{
+  return window.location.hash.replace('#','');
+};
+
 function initialize() {
 
   var height = window.innerHeight;
@@ -47,31 +74,92 @@ $('p.socialbuttons').css( 'top', height - 45+'px');
   map = new google.maps.Map(document.getElementById('map-canvas'),
     mapOptions);
 
-  // Try HTML5 geolocation
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+  var locationIsFound = false;
 
-       pos = new google.maps.LatLng(position.coords.latitude,
-       position.coords.longitude);
-
-      // var infowindow = new google.maps.InfoWindow({
-      //   map: map,
-      //   position: pos,
-      //   content: 'Location found using HTML5.'
-      // });
-
-      map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
+  var urlhash = $.fn.urlHash();
+  var arraySplit = urlhash.split('&');
+  var lat, lng;
+  if(arraySplit &&arraySplit.length > 0){
+    lat=arraySplit[0];
+    lng=arraySplit[1];
+    if(lat && lng){
+        pos = new google.maps.LatLng(lat,lng);
+        map.setCenter(pos);
+        locationIsFound = true;
+    }
   }
+  if(!locationIsFound){
+    lat = getCookie('lat');
+    lng = getCookie('lng');
+    if(lat && lng){
+        pos = new google.maps.LatLng(lat,lng);
+        map.setCenter(pos);
+        locationIsFound = true;
+    }
+  }
+  
+
+  if(!locationIsFound){
+    // Try HTML5 geolocation
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+
+         pos = new google.maps.LatLng(position.coords.latitude,
+         position.coords.longitude);
+
+        // var infowindow = new google.maps.InfoWindow({
+        //   map: map,
+        //   position: pos,
+        //   content: 'Location found using HTML5.'
+        // });
+
+        map.setCenter(pos);
+        locationIsFound = true;
+      }, function() {
+        handleNoGeolocation(true);
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
+    }
+  }
+
   google.maps.event.addListener(map, 'center_changed', function() {
     
     
+    if(checkZoom() == true){
+      checkNeedRequest();
+    }
     var currentCenterPoint = map.getCenter();
+    var lat='', lng='';
+    if(currentCenterPoint){
+      lng = currentCenterPoint.B;
+      lat = currentCenterPoint.k;
+    }
+    setCookie('lat', lat, {expires:20000000});
+    setCookie('lng', lng, {expires:20000000});
+    // var hashString = '#'+lat+'&'+lng;
+    // изменить URL
+    // if(history.pushState) {
+    //   history.pushState(null, null, hashString);
+    // }
+    // else {
+    //     location.hash = hashString;
+    // }
+
+  });
+
+
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    if(checkZoom() == true){
+      checkNeedRequest();
+    }
+  });
+  
+}
+
+function checkZoom(){
+var currentCenterPoint = map.getCenter();
     if(map.zoom < 15){
       if(!infowindow ){
          infowindow = new google.maps.InfoWindow({
@@ -93,29 +181,32 @@ $('p.socialbuttons').css( 'top', height - 45+'px');
           });
         }
       }
-      return;
+      return false;
     }
-    else if(infowindow ){
-      infowindow.close();
+    else {
+      if(infowindow ){
+        infowindow.close();
+      }
+      return true;
     }
-   
-    if(!lastSearchedPoint){
-      if(!pos){
-        lastSearchedPoint = currentCenterPoint;
-        requestStations(lastSearchedPoint);
-      } else{
-        lastSearchedPoint = pos;
-        requestStations(lastSearchedPoint);
-        
+};
+function checkNeedRequest(){
+  var currentCenterPoint = map.getCenter();
+  if(!lastSearchedPoint){
+    if(!pos){
+      lastSearchedPoint = currentCenterPoint;
+      requestStations(lastSearchedPoint);
+    } else{
+      lastSearchedPoint = pos;
+      requestStations(lastSearchedPoint);
+      
 
-      }
     }
-      else if (getDistance(lastSearchedPoint, currentCenterPoint) > 400){
-        lastSearchedPoint = currentCenterPoint;
-        requestStations(lastSearchedPoint);
-      }
-  });
-}
+  } else if (getDistance(lastSearchedPoint, currentCenterPoint) > 400){
+      lastSearchedPoint = currentCenterPoint;
+      requestStations(lastSearchedPoint);
+  }
+};
 
 function requestStations(point){
   window.setTimeout(function() {
@@ -424,6 +515,22 @@ function generateContent(dataForContent, infoWindowType){
           html: 'Открыть расписание'
       });
        $(ahref).click(function(){
+          var currentCenterPoint = map.getCenter();
+          var lat='', lng='';
+          if(currentCenterPoint){
+            lng = currentCenterPoint.B;
+            lat = currentCenterPoint.k;
+          }
+          setCookie('lat', lat, {expires:20000000});
+          setCookie('lng', lng, {expires:20000000});
+          var hashString = '#'+lat+'&'+lng;
+          //изменить URL
+          if(history.pushState) {
+            history.pushState(null, null, hashString);
+          }
+          else {
+              location.hash = hashString;
+          }
           var win = window.open(url, '_blank');
           if(win){
               //Browser has allowed it to be opened
@@ -475,6 +582,14 @@ var share = $(this).attr('data-type');
     Share.go(this);
 
 });
+// после прорисовки карты отрисовать кнопки и после ресайза отрисовать кнопки.
+
+$(window).resize(function () {
+    waitForFinalEvent(function(){
+      alert('Resize...');
+      //...
+    }, 500, "draw buttons");
+});
 
 
 
@@ -485,7 +600,7 @@ var share = $(this).attr('data-type');
 <p class="socialbuttons">
     <button class="social_share" data-type="vk">ВКонтакте</button>
     <button class="social_share" data-type="fb">Facebook</button>
-    <button class="social_share" data-type="gg">Google +</button>
+    <button class="social_share" data-type="gg">Google+</button>
     <!-- 
     <button class="social_share" data-type="ok">Одноклассники</button>
     <button class="social_share" data-type="tw">Twitter</button>
