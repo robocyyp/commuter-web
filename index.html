@@ -456,74 +456,77 @@ function generateContent(dataForContent, infoWindowType){
 
 
       var types = [];
-      selectedStation.Routes.forEach(function(v){
-        if(!types[v.TypeId]){
-          types[v.TypeId] = v.TypeId;
-        }
-      });
-
-      var divForTypes = [];
-      for (var t in types){
-        var divType = jQuery('<div/>', {
-          id: 'type'+t+'Div',
-          css: {
-              width: '100%',
-              'margin-top': '10px'
-          }
-        });
-
-        var divIcon = jQuery('<div/>', {
-        css: {
-          'background': 'url(res/'+t+'.png) no-repeat center',
-          //'background-size': 'cover',
-          'width':  '40px',
-          'height': '32px',
-          'vertical-align': 'top',
-          'display':'inline-block'
-        }});
-
-        var placeForStation = jQuery('<div/>', {
-        css: {
-          'width': windowWidth-40+'px',
-          'height': 'auto',
-          'vertical-align': 'top',
-          'display':'inline-block'
-        }});
-
+      if(selectedStation.Routes){
         selectedStation.Routes.forEach(function(v){
-          var color;
-          switch(t){
-            case '1': color = '#39A37E'; break;
-            case '2': color = '#5EB0C6'; break;
-            case '3': color = '#E64C65'; break;
-            case '4': color = '#FBC02D'; break;
-            case '5': color = '#A83264'; break;
-            default: color = 'gray'; break
+          if(!types[v.TypeId]){
+            types[v.TypeId] = v.TypeId;
           }
-          if(t == v.TypeId){
-              var divRoute = jQuery('<div/>', {
-                  //id: v.Name+'_'+v.TypeId,
-                  text: v.Name,
-                  css: {
-                  'background-color': color,
-                   'min-width': '30px',
-                  height:'20px'  ,
-                  margin: '4px',
-                  'font-weight':'bold',
-                  color:'white',
-                  'border-size':'1px',
-                  'border-color': '#979797',
-                   'display':'inline-block',
-                   'text-align':'center'
-                }
-              });
-
-              $(placeForStation).append(divRoute);
-          } 
         });
-        $(divType).append(divIcon);
-        $(divType).append(placeForStation);
-        divForTypes.push(divType);
+
+
+        var divForTypes = [];
+        for (var t in types){
+          var divType = jQuery('<div/>', {
+            id: 'type'+t+'Div',
+            css: {
+                width: '100%',
+                'margin-top': '10px'
+            }
+          });
+
+          var divIcon = jQuery('<div/>', {
+          css: {
+            'background': 'url(res/'+t+'.png) no-repeat center',
+            //'background-size': 'cover',
+            'width':  '40px',
+            'height': '32px',
+            'vertical-align': 'top',
+            'display':'inline-block'
+          }});
+
+          var placeForStation = jQuery('<div/>', {
+          css: {
+            'width': windowWidth-40+'px',
+            'height': 'auto',
+            'vertical-align': 'top',
+            'display':'inline-block'
+          }});
+
+          selectedStation.Routes.forEach(function(v){
+            var color;
+            switch(t){
+              case '1': color = '#39A37E'; break;
+              case '2': color = '#5EB0C6'; break;
+              case '3': color = '#E64C65'; break;
+              case '4': color = '#FBC02D'; break;
+              case '5': color = '#A83264'; break;
+              default: color = 'gray'; break
+            }
+            if(t == v.TypeId){
+                var divRoute = jQuery('<div/>', {
+                    //id: v.Name+'_'+v.TypeId,
+                    text: v.Name,
+                    css: {
+                    'background-color': color,
+                     'min-width': '30px',
+                    height:'20px'  ,
+                    margin: '4px',
+                    'font-weight':'bold',
+                    color:'white',
+                    'border-size':'1px',
+                    'border-color': '#979797',
+                     'display':'inline-block',
+                     'text-align':'center'
+                  }
+                });
+
+                $(placeForStation).append(divRoute);
+            } 
+          });
+          $(divType).append(divIcon);
+          $(divType).append(placeForStation);
+          divForTypes.push(divType);
+        }
       }
       var bottomDiv = jQuery('<div/>', {
         id: 'bottomDiv',
