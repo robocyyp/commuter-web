@@ -186,7 +186,8 @@ function createShedule(forecast, id){
 
 			var routeForecastCellDivRight = jQuery('<div/>', {
 					class: 'right'
-				});				
+				});	
+
 			routeTime.Time.forEach(function(time){
 
 				var minutes = Math.round(time/60);
@@ -280,7 +281,7 @@ function sortForecast(forecast){
 		});
 		// теперь для каждого маршрута находим его время и сортируем его по убыванию
 		var routeTime=[];
-		routeUnique.forEach(function(r){
+		for (var r in routeUnique) {
 			var times = [];
 			routesArray.forEach(function(a){
 				if(a.Name == r){
@@ -290,7 +291,7 @@ function sortForecast(forecast){
 			times.sort(function(a, b){return a-b});
 			var obj = {Route:r, Time:times};
 			routeTime.push(obj);
-		});
+		}
 		var objWithType = {Type:v, Routes:routeTime};
 		routeTimeType.push(objWithType);
     });
